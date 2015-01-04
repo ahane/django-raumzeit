@@ -70,6 +70,11 @@ class HappeningWithLinksFactory(HappeningFactory):
 
 
 class HappeningMethodsTest(TestCase):
+
+	def test_start_stop_validation(self):
+		""" Validate that start ist before stop"""
+		self.assertEqual(1, 1)
+
 	def test_duration(self):
 		now = timezone.now()
 		stop = now + datetime.timedelta(hours=4)

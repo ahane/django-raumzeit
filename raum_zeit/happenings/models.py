@@ -2,28 +2,21 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django_extras.db.models import LatitudeField, LongitudeField
 
 class ThirdParty(models.Model):
-
+	""" A third party that may provide links to an entity.
+		Ex: Facebook, SoundCloud, Resident Advisor
+	"""
 	def __str__(self):
 		return self.name
 	
 	name = models.CharField(max_length=200)
 	url = models.URLField(unique=True)
 
-class Location(models.Model):
-
-	name = models.CharField(max_length=200)
-
-	address = models.CharField(max_length=200)
-	lat = models.FloatField()
-	lon = models.FloatField()
-	
-class Artist(models.Model):
-	
-	name = models.CharField(max_length=200)	
-	
 class Link(models.Model):
+	""" A hyperlink relating an entity to a resource a third party
+	"""
 	class Meta:
 		abstract = True
 
@@ -33,6 +26,23 @@ class Link(models.Model):
 	identifier = models.CharField(max_length=200, blank=True, null=True)
 	is_source = models.BooleanField(default=False)
 	third_party = models.ForeignKey(ThirdParty)
+
+
+
+class Location(models.Model):
+
+	def __str__(self):
+		return self.name
+
+	name = models.CharField(max_length=200)
+	address = models.CharField(max_length=200)
+	lat = LatitudeField()
+	lon = LongitudeField()
+	
+class Artist(models.Model):
+	
+	name = models.CharField(max_length=200)	
+	
 
 
 class HappeningLink(Link):
@@ -63,7 +73,7 @@ class Happening(models.Model):
 	stop = models.DateTimeField()
 
 	location = models.ForeignKey(Location)
-	artists = models.ManyToManyField(Artist, db_table='performance')
+	artists = models.ManyToManyField(Artist, db_table='performance', blank=True)
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='HappeningLink', through_fields=('happening', 'third_party'))
 
