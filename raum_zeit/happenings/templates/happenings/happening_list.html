@@ -1,16 +1,15 @@
 {% extends "happenings/base.html" %}
+
 {% block content %}
 {% for happening in object_list %}
-
-	<paper-item class="happening-item">
-	<a href="{% url 'happenings:happening_detail' happening.id %}">
-	</a>
-		<div flex>
-			<div class="name">{{ happening.name }}</div>
-			<div class="club-name">{{ happening.location.name }}</div>
-		</div>
-
-	</paper-item>
+	<my-card>
+	<h2>{{ happening.location.name }}</h2>
+	<address>{{ happening.location.address }}</address>
+	<h3>{{ happening.name }}</h3>
+	<p>{{ happening.description }}</p>
+	From: <p>{{ happening.start }}</p>
+	Till: <p>{{ happening.stop }}</p>
+	</my-card>
 {% endfor %}
 
 {% endblock %}
