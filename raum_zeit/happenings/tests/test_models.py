@@ -1,88 +1,27 @@
 import datetime
 from django.test import TestCase
 from django.utils import timezone
-
-import factory
+from django.core.exceptions import ValidationError
+#import factory
 from happenings.models import Happening, Location, ThirdParty, HappeningLink
+from happenings.util import UTC
 
-
-class UTC(datetime.tzinfo):
-	    """UTC"""
-
-	    def utcoffset(self, dt):
-	        return datetime.timedelta(0)
-
-	    def tzname(self, dt):
-	        return "UTC"
-
-	    def dst(self, dt):
-	        return datetime.timedelta(0)
-
-def make_dt(day=1, hour=12, tzinfo=UTC()):
-
-	return datetime.datetime(2015, 1, day, hour, tzinfo=UTC())
-
-class LocationFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = Location
-
-	name = factory.Sequence(lambda n: 'location{}'.format(n))
-	address = 'foobar'
-	lat = 51.1
-	lon = 13.1
-
-class ThirdPartyFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = ThirdParty
-	name = factory.Sequence(lambda n: 'thirdparty{}'.format(n))
-	url = factory.LazyAttribute(lambda o: 'http://{}.com'.format(o.name))
-
-class HappeningFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = Happening
-	name = factory.Sequence(lambda n: 'happening{}'.format(n))
-	start = make_dt(hour=12)
-	stop = factory.LazyAttribute(lambda o: o.start + datetime.timedelta(hours=4))
-	location = factory.SubFactory(LocationFactory)
-
-def make_happenings():
-	# 10:00h, 12:00h, 14:00h, 16:00h
-	starts = [make_dt(hour=h) for h in range(10, 18, 2)]
-	# Standard duration of 4 hours
-	for start in starts:
-		HappeningFactory(start=start)
-
-class HappeningLinkFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = HappeningLink
-
-	third_party = factory.SubFactory(ThirdPartyFactory)
-	happening = factory.SubFactory(HappeningFactory)
-	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.happening))
-	identifier = factory.LazyAttribute(lambda o: o.happening.id)
-
-class HappeningWithLinkFactory(HappeningFactory):
-	third_parties = factory.RelatedFactory(HappeningLinkFactory, 'happening')
-
-class HappeningWithLinksFactory(HappeningFactory):
-	third_parties1 = factory.RelatedFactory(HappeningLinkFactory, 'happening')
-	third_parties2 = factory.RelatedFactory(HappeningLinkFactory, 'happening')
-
+from happenings.tests.factories import *
 
 class HappeningMethodsTest(TestCase):
 
 	def test_start_stop_validation(self):
-		""" Validate that start ist before stop"""
-		self.assertEqual(1, 1)
+		""" Validate that start is before stop"""
+		with self.assertRaises(ValidationError):
+			h = HappeningFactory(start=make_dt(10), stop=make_dt(9))
+			h.full_clean()
+
 
 	def test_duration(self):
-		now = timezone.now()
-		stop = now + datetime.timedelta(hours=4)
-		h = HappeningFactory(start=now, stop=stop)
+		h = HappeningFactory()
 		self.assertEqual(h.duration(), datetime.timedelta(hours=4))
 
 	def test_creation_with_link(self):
-
 		h = HappeningWithLinkFactory()
 		tps = h.third_parties.all()
 		third_party_name = tps[0].name
@@ -110,7 +49,6 @@ class HappeningMethodsTest(TestCase):
 		self.assertEqual(urls, {'http://thirdparty1.com/happening1', 'http://thirdparty2.com/happening1'})
 
 class HappeningQueryTest(TestCase):
-
 
 	def test_query_timespan(self):
 		make_happenings()
@@ -145,6 +83,8 @@ class HappeningQueryTest(TestCase):
 
 		h = Happening.objects.link_get('http://thirdparty1.com/happening1')
 		self.assertEqual(h.name, 'happening1')
+
+
 
 
 

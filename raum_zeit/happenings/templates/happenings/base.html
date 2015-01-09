@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="{% static 'happenings/app/bower_components/webcomponentsjs/webcomponents.js' %}">
+	</script>	
+	<link rel="stylesheet" type="text/css" href="{% static 'happenings/style.css' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/core-toolbar/core-toolbar.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/core-item/core-item.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/core-header-panel/core-header-panel.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/core-icons/core-icons.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/paper-icon-button/paper-icon-button.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/paper-tabs/paper-tabs.html' %}" />
+	<link rel="import" href="{% static 'happenings/app/bower_components/paper-item/paper-item.html' %}" />
+</head>
+<body fullbleed vertical layout unresolved>
+		<core-header-panel flex>
+			<core-toolbar class="medium-tall">
+				<paper-icon-button icon="menu">
+				</paper-icon-button>
+				<div>heutnacht</div>
+			<!-- <paper-tabs class="bottom fit" selected="0">
+		    	<paper-tab>Happenings</paper-tab>
+		    	<paper-tab>Artists</paper-tab>
+		    	<paper-tab>Locations</paper-tab>
+		  	</paper-tabs> -->
+
+			</core-toolbar>
+			<div class="content">
+				{% block content %}
+				{% endblock %}
+			</div>
+		
+		</core-header-panel>
+		
+
+</body>
+</html>

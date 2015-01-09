@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'happenings',
     'debug_toolbar',
-    'django_extras'
+    'django_extras',
+    'tastypie'
 )
 
 MIDDLEWARE_CLASSES = (

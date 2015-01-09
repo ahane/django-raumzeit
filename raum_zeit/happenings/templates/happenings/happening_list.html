@@ -1,0 +1,16 @@
+{% extends "happenings/base.html" %}
+{% block content %}
+{% for happening in object_list %}
+
+	<paper-item class="happening-item">
+	<a href="{% url 'happenings:happening_detail' happening.id %}">
+	</a>
+		<div flex>
+			<div class="name">{{ happening.name }}</div>
+			<div class="club-name">{{ happening.location.name }}</div>
+		</div>
+
+	</paper-item>
+{% endfor %}
+
+{% endblock %}

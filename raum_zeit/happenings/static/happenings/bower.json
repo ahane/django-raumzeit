@@ -1,0 +1,30 @@
+{
+  "name": "happenings",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ahane/django-raumzeit",
+  "authors": [
+    "Alec Hanefeld <alec@hanefeld.eu>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.2",
+    "core-toolbar": "Polymer/core-toolbar#~0.5.2",
+    "core-header-panel": "Polymer/core-header-panel#~0.5.2",
+    "core-menu": "Polymer/core-menu#~0.5.2",
+    "core-item": "Polymer/core-item#~0.5.2",
+    "core-icon": "Polymer/core-icon#~0.5.2",
+    "core-icons": "Polymer/core-icons#~0.5.2",
+    "paper-icon-button": "Polymer/paper-icon-button#~0.5.2",
+    "paper-tabs": "Polymer/paper-tabs#~0.5.2",
+    "paper-item": "Polymer/paper-item#~0.5.2"
+  }
+}
