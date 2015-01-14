@@ -9,7 +9,7 @@ class ThirdParty(models.Model):
 	def __str__(self):
 		return self.name
 	
-	name = models.CharField(max_length=200)
+	name = models.CharField(max_length=200, unique=True)
 	url = models.URLField(unique=True)
 
 class Link(models.Model):
@@ -67,6 +67,9 @@ class ArtistLink(Link):
 
 class Artist(models.Model):
 	
+	def __str__(self):
+		return self.name
+
 	name = models.CharField(max_length=200)
 	description = models.CharField(max_length=200, default='')
 	third_parties = models.ManyToManyField(ThirdParty, 
@@ -107,6 +110,9 @@ class Performance(models.Model):
 
 class Happening(models.Model):
 
+	class Meta:
+		ordering = ('start', 'stop')
+
 	def __str__(self):
 		return self.name
 
@@ -116,7 +122,7 @@ class Happening(models.Model):
 	description = models.CharField(max_length=200, default='')
 
 	location = models.ForeignKey(Location)
-	artists = models.ManyToManyField(Artist, through=Performance, blank=True)
+	artists = models.ManyToManyField(Artist, through=Performance)
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='HappeningLink', through_fields=('happening', 'third_party'))
 	objects = HappeningQuerySet.as_manager()

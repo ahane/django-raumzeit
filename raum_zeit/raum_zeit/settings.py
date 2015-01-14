@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'happenings',
     'debug_toolbar',
     'django_extras',
-    'tastypie'
+    'rest_framework'
 )
 
 MIDDLEWARE_CLASSES = (

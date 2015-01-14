@@ -14,7 +14,7 @@ class HappeningMethodsTest(TestCase):
 	def test_start_stop_validation(self):
 		""" Validate that start is before stop"""
 		with self.assertRaises(ValidationError):
-			h = HappeningFactory(start=make_dt(10), stop=make_dt(9))
+			h = HappeningFactory(start=make_dt(hour=10), stop=make_dt(hour=9))
 			h.full_clean()
 
 	def test_duration(self):
@@ -36,6 +36,16 @@ class HappeningMethodsTest(TestCase):
 		(self.assertIsInstance(link, HappeningLink) for tp in tps)
 		tp_names = {tp.name for tp in tps}
 		self.assertEquals(tp_names, {'thirdparty1', 'thirdparty2'})
+
+	def test_ordering(self):
+		HappeningFactory.reset_sequence()
+		HappeningFactory(start=make_dt(hour=11), stop=make_dt(hour=12))
+		HappeningFactory(start=make_dt(hour=9), stop=make_dt(hour=10))
+		HappeningFactory(start=make_dt(hour=13), stop=make_dt(hour=14))
+		HappeningFactory(start=make_dt(hour=9), stop=make_dt(hour=9, minute=30))
+
+		creation_numbers = [int(h.name[-1]) for h in Happening.objects.all()]
+		self.assertEquals(creation_numbers, [4, 2, 1, 3])
 
 
 class HappeningQueryTest(TestCase):

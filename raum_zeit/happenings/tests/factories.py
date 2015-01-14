@@ -1,7 +1,7 @@
 import factory
 import datetime
 from happenings.util import UTC
-from happenings.models import Happening, HappeningLink, Artist, Location, ThirdParty
+from happenings.models import Happening, HappeningLink, Artist, Location, LocationLink, ThirdParty
 
 ########################
 # Helper Factories
@@ -10,8 +10,8 @@ from happenings.models import Happening, HappeningLink, Artist, Location, ThirdP
 def make_tz():
 	return UTC()
 
-def make_dt(day=1, hour=12, tzinfo=make_tz()):
-	return datetime.datetime(2015, 1, day, hour, tzinfo=tzinfo)
+def make_dt(day=1, hour=12, minute=0, tzinfo=make_tz()):
+	return datetime.datetime(2015, 1, day, hour, minute, tzinfo=tzinfo)
 
 ########################
 # Entity Factories
@@ -50,6 +50,15 @@ class HappeningLinkFactory(factory.django.DjangoModelFactory):
 	happening = factory.SubFactory(HappeningFactory)
 	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.happening))
 	identifier = factory.LazyAttribute(lambda o: o.happening.id)
+
+class LocationLinkFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = LocationLink
+
+	third_party = factory.SubFactory(ThirdPartyFactory)
+	location = factory.SubFactory(LocationFactory)
+	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.location))
+	identifier = factory.LazyAttribute(lambda o: o.location.id)
 
 class ArtistFactory(factory.django.DjangoModelFactory):
 	class Meta:
