@@ -24,6 +24,18 @@ artistlink_list = views.ArtistLinkViewSet.as_view({
 })
 
 
+happeninglink_list = views.HappeningLinkViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
+performance_list = views.PerformanceViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
+
+
 
 urlpatterns = patterns('',
 	url(r'^$', views.HappeningListView.as_view(), name='happenings_list'),
@@ -39,8 +51,15 @@ urlpatterns = patterns('',
 	url(r'^api/artists/$', views.ArtistList.as_view(), name='api-artists-list'),
 	url(r'^api/artists/links/$', artistlink_list, name='api-artistlinks-list'),
 
+	url(r'^api/happenings/(?P<pk>\d+)/$', views.HappeningDetail.as_view(), name='api-happening-detail'),
+	url(r'^api/happenings/$', views.HappeningList.as_view(), name='api-happenings-list'),
+	url(r'^api/happenings/links/$', happeninglink_list, name='api-happeninglinks-list'),
+
 	url(r'^api/thirdparties/(?P<pk>\d+)/$', views.ThirdPartyDetail.as_view(), name='api-thirdparty-detail'),
 	url(r'^api/thirdparties/$', views.ThirdPartyList.as_view(), name='api-thirdparties-list'),
+
+	#url(r'^api/performances/(?P<pk>\d+)/$', location_detail, name='api-location-detail'),
+	url(r'^api/performances/$', performance_list, name='api-performances-list'),
 
 	url(r'^api/', views.api_root) # with a $ this breaks, without is hast to be the last item!
 )

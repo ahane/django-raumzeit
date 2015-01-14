@@ -8,9 +8,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 
-from happenings.serializers import LocationSerializer, ArtistSerializer, ThirdPartySerializer, \
-	LocationLinkSerializer, ArtistLinkSerializer
-from happenings.models import Happening, Location, LocationLink, Artist, ArtistLink, ThirdParty
+from happenings.serializers import LocationSerializer, ArtistSerializer, HappeningSerializer, \
+	ThirdPartySerializer, LocationLinkSerializer, ArtistLinkSerializer, HappeningLinkSerializer, PerformanceSerializer
+from happenings.models import Happening, HappeningLink, Location, LocationLink, Artist, ArtistLink, ThirdParty, Performance
 
 
 ###########################
@@ -61,6 +61,21 @@ class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Artist.objects.all()
 	serializer_class = ArtistSerializer
 
+class HappeningList(generics.ListCreateAPIView):
+	"""
+	List all artist or create a new one.
+	"""
+	queryset = Happening.objects.all()
+	serializer_class = HappeningSerializer
+
+
+class HappeningDetail(generics.RetrieveUpdateDestroyAPIView):
+	"""
+	Retrieve, update or delete a artist instance.
+	"""
+	queryset = Happening.objects.all()
+	serializer_class = HappeningSerializer
+
 class ThirdPartyList(generics.ListCreateAPIView):
 	"""
 	List all thirdparties or create a new one.
@@ -96,3 +111,23 @@ class ArtistLinkViewSet(viewsets.ModelViewSet):
     """
     queryset = ArtistLink.objects.all()
     serializer_class = ArtistLinkSerializer
+
+class HappeningLinkViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+
+
+    """
+    queryset = HappeningLink.objects.all()
+    serializer_class = HappeningLinkSerializer
+
+class PerformanceViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+
+
+    """
+    queryset = Performance.objects.all()
+    serializer_class = PerformanceSerializer

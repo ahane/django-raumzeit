@@ -10,4 +10,16 @@ class UTC(datetime.tzinfo):
 	        return "UTC"
 
 	    def dst(self, dt):
-	        return datetime.timedelta(0)
+	        return None
+
+class CET(datetime.tzinfo):
+	    """UTC"""
+
+	    def utcoffset(self, dt):
+	        return datetime.timedelta(hours=1)
+
+	    def tzname(self, dt):
+	        return "CET"
+
+	    def dst(self, dt):
+	        return None
