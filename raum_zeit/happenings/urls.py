@@ -13,10 +13,16 @@ location_detail = views.LocationViewSet.as_view({
     'delete': 'destroy'
 })
 
-locationlink_list = views.LocationViewSet.as_view({
+locationlink_list = views.LocationLinkViewSet.as_view({
     'get': 'list',
     'post': 'create'
 })
+
+artistlink_list = views.ArtistLinkViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
 
 
 urlpatterns = patterns('',
@@ -27,11 +33,11 @@ urlpatterns = patterns('',
 	
 	url(r'^api/locations/(?P<pk>\d+)/$', location_detail, name='api-location-detail'),
 	url(r'^api/locations/$', location_list, name='api-locations-list'),
-
 	url(r'^api/locations/links/$', locationlink_list, name='api-locationlinks-list'),
 
 	url(r'^api/artists/(?P<pk>\d+)/$', views.ArtistDetail.as_view(), name='api-artist-detail'),
 	url(r'^api/artists/$', views.ArtistList.as_view(), name='api-artists-list'),
+	url(r'^api/artists/links/$', artistlink_list, name='api-artistlinks-list'),
 
 	url(r'^api/thirdparties/(?P<pk>\d+)/$', views.ThirdPartyDetail.as_view(), name='api-thirdparty-detail'),
 	url(r'^api/thirdparties/$', views.ThirdPartyList.as_view(), name='api-thirdparties-list'),

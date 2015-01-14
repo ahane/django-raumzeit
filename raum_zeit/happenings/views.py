@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 
-from happenings.serializers import LocationSerializer, ArtistSerializer, ThirdPartySerializer, LocationLinkSerializer
-from happenings.models import Happening, Location, LocationLink, Artist, ThirdParty
+from happenings.serializers import LocationSerializer, ArtistSerializer, ThirdPartySerializer, \
+	LocationLinkSerializer, ArtistLinkSerializer
+from happenings.models import Happening, Location, LocationLink, Artist, ArtistLink, ThirdParty
 
 
 ###########################
@@ -84,3 +85,14 @@ class LocationLinkViewSet(viewsets.ModelViewSet):
     """
     queryset = LocationLink.objects.all()
     serializer_class = LocationLinkSerializer
+
+
+class ArtistLinkViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+
+
+    """
+    queryset = ArtistLink.objects.all()
+    serializer_class = ArtistLinkSerializer

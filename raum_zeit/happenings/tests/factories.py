@@ -1,7 +1,7 @@
 import factory
 import datetime
 from happenings.util import UTC
-from happenings.models import Happening, HappeningLink, Artist, Location, LocationLink, ThirdParty
+from happenings.models import Happening, HappeningLink, Artist, ArtistLink, Location, LocationLink, ThirdParty
 
 ########################
 # Helper Factories
@@ -60,12 +60,23 @@ class LocationLinkFactory(factory.django.DjangoModelFactory):
 	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.location))
 	identifier = factory.LazyAttribute(lambda o: o.location.id)
 
+
 class ArtistFactory(factory.django.DjangoModelFactory):
 	class Meta:
 		model = Artist
 
 	name = factory.Sequence(lambda n: 'artist{}'.format(n))
 	description = 'desc'
+
+class ArtistLinkFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = ArtistLink
+
+	third_party = factory.SubFactory(ThirdPartyFactory)
+	artist = factory.SubFactory(ArtistFactory)
+	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.artist))
+	identifier = factory.LazyAttribute(lambda o: o.artist.id)
+
 
 
 #######################
