@@ -2,6 +2,13 @@ from django.db import models
 from django_extras.db.models import LatitudeField, LongitudeField
 from django.core.exceptions import ValidationError
 
+class HasLinkQueryMixin(object):
+	def has_link(self, url):
+		""" Get an entity through a saved third_party link. """
+
+		return self.select_related('links').filter(links__url=url).all()
+
+
 class ThirdParty(models.Model):
 	""" A third party that may provide links to an entity.
 		Ex: Facebook, SoundCloud, Resident Advisor
@@ -47,6 +54,9 @@ class LocationLink(Link):
 
 	location = models.ForeignKey('Location', related_name='links')
 
+class LocationQuerySet(models.QuerySet, HasLinkQueryMixin):
+	pass
+
 class Location(models.Model):
 
 	def __str__(self):
@@ -60,10 +70,20 @@ class Location(models.Model):
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='LocationLink', through_fields=('location', 'third_party'))
 
+	objects = LocationQuerySet.as_manager()
+
+class ArtistLinkQuerySet(models.QuerySet):
+	def has_link(self, url):
+		return self.filter(url=url)
+
 
 class ArtistLink(Link):
 
 	artist = models.ForeignKey('Artist', related_name='links')
+	objects = ArtistLinkQuerySet.as_manager()
+
+class ArtistQuerySet(models.QuerySet, HasLinkQueryMixin):
+	pass
 
 class Artist(models.Model):
 	
@@ -74,24 +94,22 @@ class Artist(models.Model):
 	description = models.CharField(max_length=200, default='')
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='ArtistLink', through_fields=('artist', 'third_party'))
+
+	objects = ArtistQuerySet.as_manager()
 	
 class HappeningLink(Link):
 
 	happening = models.ForeignKey('Happening', related_name='links')
 	
-class HappeningQuerySet(models.QuerySet):
 
-	def in_timespan(self, span_begin, span_end):
+class HappeningQuerySet(models.QuerySet, HasLinkQueryMixin):
+
+	def in_timespan(self, after, before):
 		""" Query happenings that overlap with the given timespan. 
-		start < span_end
-		stop > span_begin """
+		start < span_end = before
+		stop > span_begin = after"""
     
-		return self.filter(start__lt=span_end, stop__gt=span_begin)
-
-	def link_get(self, url):
-		""" Get a Happening through a saved third_party link. """
-
-		return self.select_related('links').filter(links__url=url).get()
+		return self.filter(start__lt=before, stop__gt=after)
 
 class Performance(models.Model):
 

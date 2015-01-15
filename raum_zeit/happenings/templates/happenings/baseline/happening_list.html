@@ -1,0 +1,48 @@
+{% extends 'happenings/baseline/baseline.html' %}
+
+{% block nav %}
+<li><a href="#top" class="button default">Happenings</a></li>
+<li><a href="#content">Locations</a></li>
+<li><a href="#elements">Artists</a></li>
+{% endblock %}
+
+{% block banner %}
+<section id="banner">
+	<h2>Find out whats happening.</h2>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="grid-demo">
+<div class="row uniform">
+{% for happening in object_list %}
+	<div class="4u 6u(medium) 12u$(xsmall)">
+		<div class="paper">
+		<div class="row">
+			<div class="10u">
+				<h2>{{ happening.location.name }}</h2>
+			</div>
+			<div class="2u">
+				<i class="fa fa-star-o"></i>
+			</div>
+		</div>
+
+		<address>{{ happening.location.address }}</address>
+		<h3>{{ happening.name }}</h3>
+		<div class="row">
+			<div class="4u">
+				{{ happening.description }}
+			</div>
+			<div class="8u">
+				<p>From: {{ happening.start }}</p>
+				<p>Till: {{ happening.stop }}</p>
+			</div>
+		</div>
+		{{ happening.description }}
+
+	</div>
+	</div>
+{% endfor %}
+</div>
+</div>
+{% endblock %}

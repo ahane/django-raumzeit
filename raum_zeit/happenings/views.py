@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+import datetime
+
 from django.views import generic
 
 from rest_framework import generics
@@ -19,7 +19,18 @@ from happenings.models import Happening, HappeningLink, Location, LocationLink, 
 
 class HappeningListView(generic.ListView):
 	model = Happening
-	template_name = 'happenings/happening_list.html'
+	template_name = 'happenings/baseline/happening_list.html'
+
+class CurrentHappeningListView(generic.ListView):
+	model = Happening
+	template_name = 'happenings/baseline/happening_list.html'
+	def get_queryset(self):
+		#after = self.requests.after
+		#before = self.request.before
+		after = datetime.datetime.now()
+		before = after + datetime.timedelta(hours=12)
+		return Happening.objects.in_timespan(after=after, before=before)
+
 
 class HappeningDetailView(generic.DetailView):
 	model = Happening
@@ -36,23 +47,38 @@ def api_root(request, format=None):
 		'artists': reverse('happenings:api-artists-list', request=request, format=format),
 		})
 
-class LocationViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
+class LocationList(generics.ListCreateAPIView):
+	"""
+	List all artist or create a new one.
+	"""
+	serializer_class = LocationSerializer
 
+	def get_queryset(self):
+		queryset = Location.objects.all()
+		url = self.request.query_params.get('url', None)
+		if url:
+			queryset = queryset.has_link(url)
+		return queryset
 
-    """
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
+class LocationDetail(generics.RetrieveUpdateDestroyAPIView):
+	"""
+	Retrieve, update or delete a artist instance.
+	"""
+	queryset = Location.objects.all()
+	serializer_class = LocationSerializer
 
 class ArtistList(generics.ListCreateAPIView):
 	"""
 	List all artist or create a new one.
 	"""
-	queryset = Artist.objects.all()
 	serializer_class = ArtistSerializer
 
+	def get_queryset(self):
+		queryset = Artist.objects.all()
+		url = self.request.query_params.get('url', None)
+		if url:
+			queryset = queryset.has_link(url)
+		return queryset
 
 class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
@@ -65,8 +91,14 @@ class HappeningList(generics.ListCreateAPIView):
 	"""
 	List all artist or create a new one.
 	"""
-	queryset = Happening.objects.all()
+	#queryset = Happening.objects.all()
 	serializer_class = HappeningSerializer
+	def get_queryset(self):
+		queryset = Happening.objects.all()
+		url = self.request.query_params.get('url', None)
+		if url:
+			queryset = queryset.has_link(url)
+		return queryset
 
 
 class HappeningDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -101,16 +133,26 @@ class LocationLinkViewSet(viewsets.ModelViewSet):
     queryset = LocationLink.objects.all()
     serializer_class = LocationLinkSerializer
 
+class ArtistLinkList(generics.ListCreateAPIView):
+	"""
+	List all artist or create a new one.
+	"""
+	#queryset = Happening.objects.all()
+	serializer_class = ArtistLinkSerializer
+	def get_queryset(self):
+		queryset = ArtistLink.objects.all()
+		url = self.request.query_params.get('url', None)
+		if url:
+			queryset = queryset.has_link(url)
+		return queryset
 
-class ArtistLinkViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
 
-
-    """
-    queryset = ArtistLink.objects.all()
-    serializer_class = ArtistLinkSerializer
+class ArtistLinkDetail(generics.RetrieveUpdateDestroyAPIView):
+	"""
+	Retrieve, update or delete a artist instance.
+	"""
+	queryset = ArtistLink.objects.all()
+	serializer_class = ArtistLinkSerializer
 
 class HappeningLinkViewSet(viewsets.ModelViewSet):
     """

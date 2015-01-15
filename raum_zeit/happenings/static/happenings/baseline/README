@@ -1,0 +1,9 @@
+Skel has to be de-minified and the newStyleSheet function adjusted to work with Django:
+
+newStyleSheet: function(e) {
+                var t = document[y]("link");
+                var stat = "static/happenings/baseline/"
+                return t.rel = "stylesheet", t.type = dt, t[en] = stat + e, t
+                // return t.rel = "stylesheet", t.type = dt, t[en] = e, t 
+                // the original
+}

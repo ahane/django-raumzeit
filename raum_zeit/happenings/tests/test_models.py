@@ -2,7 +2,7 @@ import datetime
 from django.test import TestCase
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from happenings.models import Happening, Location, ThirdParty, HappeningLink
+from happenings.models import Happening, Location, Artist, ThirdParty, HappeningLink
 from happenings.util import UTC
 
 from happenings.tests.factories import *
@@ -87,10 +87,52 @@ class HappeningQueryTest(TestCase):
 		HappeningWithLinksFactory()
 		HappeningWithLinksFactory()
 
-		h = Happening.objects.link_get('http://thirdparty1.com/happening1')
+		happenings = Happening.objects.has_link('http://thirdparty1.com/happening1')
+		h = happenings[0]
 		self.assertIsInstance(h, Happening)
 		self.assertEqual(h.name, 'happening1')
 
+
+class ArtistQueryTest(TestCase):
+	def test_query_url(self):
+		ThirdPartyFactory.reset_sequence()
+		a = ArtistFactory()
+		ArtistFactory()
+		link = ArtistLinkFactory(artist=a)
+		ArtistLinkFactory()
+
+		artists = Artist.objects.has_link(link.url)
+		print(artists)
+		found_a = artists[0]
+		self.assertIsInstance(found_a, Artist)
+		self.assertEqual(a, found_a)
+
+class ArtistLinkQueryTest(TestCase):
+	def test_query_url(self):
+		ThirdPartyFactory.reset_sequence()
+		a = ArtistFactory()
+		ArtistFactory()
+		link = ArtistLinkFactory(artist=a)
+		ArtistLinkFactory()
+
+		found_links = ArtistLink.objects.has_link(link.url)
+		
+		found_link = found_links[0]
+		self.assertIsInstance(found_link, ArtistLink)
+		self.assertEqual(link, found_link)
+
+class LocationQueryTest(TestCase):
+	def test_query_url(self):
+		ThirdPartyFactory.reset_sequence()
+		l = LocationFactory()
+		LocationFactory()
+		link = LocationLinkFactory(location=l)
+		LocationLinkFactory()
+
+		locs = Location.objects.has_link(link.url)
+		found_l = locs[0]
+		self.assertIsInstance(found_l, Location)
+		self.assertEqual(l, found_l)
 
 
 
