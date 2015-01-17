@@ -74,6 +74,8 @@ hr {
   margin: 2em 0; }
   hr.major {
     margin: 3em 0; }
+  hr.minor {
+    margin: 1.3em 0; }
 
 blockquote {
   border-left: solid 4px rgba(144, 144, 144, 0.25);
@@ -712,5 +714,26 @@ input[type="button"],
   font-weight: 300;
   border-radius: 0.15rem;
   box-shadow: 1px 2px 6px #888888; }
+  .paper h1, .paper h2, .paper h3, .paper h4 {
+    margin-bottom: 0.3em;
+    font-weight: 300; }
+  .paper h2 {
+    font-weight: 300;
+    font-size: 200%; }
+  .paper h3 {
+    font-weight: 300;
+    font-size: 135%; }
+  .paper p.tiny {
+    font-size: 80%;
+    font-weight: 300;
+    margin-bottom: 0.6em; }
+  .paper p.medium {
+    font-size: 110%;
+    font-weight: 300;
+    margin-bottom: 0.8em; }
+  .paper p.big {
+    font-size: 140%;
+    font-weight: 400;
+    margin-bottom: 0.8em; }
 
 /*# sourceMappingURL=style.css.map */

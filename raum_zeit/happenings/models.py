@@ -1,13 +1,24 @@
+import datetime
+import pytz
 from django.db import models
 from django_extras.db.models import LatitudeField, LongitudeField
 from django.core.exceptions import ValidationError
+from happenings.util import now_utc
 
-class HasLinkQueryMixin(object):
+class LinksQueryMixin(object):
+	""" Functionality for querysets of models that have a 'links' attribute """
+
 	def has_link(self, url):
 		""" Get an entity through a saved third_party link. """
 
 		return self.select_related('links').filter(links__url=url).all()
 
+	def with_links(self):
+		return self.prefetch_related('links').prefetch_related('links__third_party')
+
+#class ThirdPartyQuerySet(models.QuerySet, LinksQueryMixin):
+class ThirdPartyQuerySet(models.QuerySet):
+	pass
 
 class ThirdParty(models.Model):
 	""" A third party that may provide links to an entity.
@@ -18,6 +29,7 @@ class ThirdParty(models.Model):
 	
 	name = models.CharField(max_length=200, unique=True)
 	url = models.URLField(unique=True)
+	objects = ThirdPartyQuerySet.as_manager()
 
 class Link(models.Model):
 	""" A hyperlink relating an entity to a resource a third party
@@ -54,7 +66,7 @@ class LocationLink(Link):
 
 	location = models.ForeignKey('Location', related_name='links')
 
-class LocationQuerySet(models.QuerySet, HasLinkQueryMixin):
+class LocationQuerySet(models.QuerySet, LinksQueryMixin):
 	pass
 
 class Location(models.Model):
@@ -76,14 +88,34 @@ class ArtistLinkQuerySet(models.QuerySet):
 	def has_link(self, url):
 		return self.filter(url=url)
 
+	def no_samples(self, third_party):
+		""" Finds all links of given third party that have REPR but no SMPL links for same artist.
+			
+			Ex. Find all SoundCloud pages that haven't had tracks scraped from.
+		"""
+
+		repr_links = self.filter(third_party=third_party, category='REPR')
+		no_smpl = repr_links.exclude(artist__links__third_party=third_party,
+									 artist__links__category='SMPL')
+		return no_smpl
+
 
 class ArtistLink(Link):
 
 	artist = models.ForeignKey('Artist', related_name='links')
 	objects = ArtistLinkQuerySet.as_manager()
 
-class ArtistQuerySet(models.QuerySet, HasLinkQueryMixin):
-	pass
+class ArtistQuerySet(models.QuerySet, LinksQueryMixin):
+	
+	def no_samples(self, third_party):
+		""" Finds all links of given third party that have REPR but no SMPL links for same artist.
+			
+			Ex. Find all SoundCloud pages that haven't had tracks scraped from.
+		"""
+		with_repr = self.filter(links__third_party=third_party, links__category='REPR')
+		without_smpl = with_repr.exclude(links__category='SMPL')
+		return without_smpl
+
 
 class Artist(models.Model):
 	
@@ -102,16 +134,27 @@ class HappeningLink(Link):
 	happening = models.ForeignKey('Happening', related_name='links')
 	
 
-class HappeningQuerySet(models.QuerySet, HasLinkQueryMixin):
+class HappeningQuerySet(models.QuerySet, LinksQueryMixin):
 
 	def in_timespan(self, after, before):
 		""" Query happenings that overlap with the given timespan. 
 		start < span_end = before
 		stop > span_begin = after"""
     
-		return self.filter(start__lt=before, stop__gt=after)
+		filtered = self.filter(start__lt=before, stop__gt=after)
+		return filtered
+
+	def with_artists(self):
+		return self.prefetch_related('artists')
+
+	def with_location(self):
+		return self.prefetch_related('location')
+
 
 class Performance(models.Model):
+
+	class Meta:
+		unique_together = ('happening', 'artist')
 
 	LIVE_MUSIC = 'LIVE' # Live music such as a band
 	LIVE_DJING = 'LIDJ' # A DJ actually performing a live set
@@ -125,6 +168,7 @@ class Performance(models.Model):
 	happening = models.ForeignKey('Happening', related_name='performances')
 	artist = models.ForeignKey('Artist', related_name='performances')
 	kind = models.CharField(max_length=4, choices=KINDS, default=DJING)
+	
 
 class Happening(models.Model):
 
@@ -143,12 +187,21 @@ class Happening(models.Model):
 	artists = models.ManyToManyField(Artist, through=Performance)
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='HappeningLink', through_fields=('happening', 'third_party'))
+	
 	objects = HappeningQuerySet.as_manager()
+
+	def is_active(self):
+		return self.start <= now_utc() < self.stop
+
+	def is_past(self):
+		return self.stop <= now_utc()
+
+	def is_future(self):
+		return now_utc() < self.start
 
 	def clean(self):
 		if self.start > self.stop:
 			raise ValidationError('Happening can not stop before it starts', code='date') # add gettext
-
 
 	def duration(self):
 		return self.stop - self.start

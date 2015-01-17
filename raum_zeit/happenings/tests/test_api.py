@@ -2,9 +2,8 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from happenings.tests.factories import ArtistFactory, LocationFactory, HappeningFactory, ThirdPartyFactory, \
-	LocationLinkFactory, ArtistLinkFactory, HappeningLinkFactory, PerformanceFactory, make_dt
-
+from happenings.tests.factories import *
+import pytz
 
 def replace(dct, key, value):
 	d = dct.copy()
@@ -18,19 +17,85 @@ class HappeningTests(APITestCase):
 			
 			'description': 'foobar', 'links': []}
 
+	def test_create_happening(self):
+		""" If an happening is created with a timezone naive
+			datetimes, it is assumed to be UTC.
+		"""
+		l = LocationFactory()
+		data = self.data.copy()
+		data['location'] = l.id
+
+		start = make_dt(hour=8, tzinfo=None).isoformat()
+		stop = make_dt(hour=9, tzinfo=None).isoformat()
+		data['start'], data['stop'] = start, stop
+		response = self.client.post(self.list_url, data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		# Z = zulu = UTC
+		self.assertEqual(response.data['start'], start + 'Z')
+		self.assertEqual(response.data['stop'], stop + 'Z')
+
 	def test_create_happening_UTC(self):
 		l = LocationFactory()
 		data = self.data.copy()
 		data['location'] = l.id
 
-		start = make_dt(hour=8, tzinfo=None).isoformat()+'Z'
-		stop = make_dt(hour=9, tzinfo=None).isoformat()+'Z'
+		naive_start = datetime.datetime.utcnow()
+		naive_stop = naive_start + datetime.timedelta(hours=4)
+
+		start = pytz.utc.localize(naive_start)
+		stop = pytz.utc.localize(naive_stop)
+
+		data['start'], data['stop'] = start.isoformat(), stop.isoformat()
+		response = self.client.post(self.list_url, data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		zulu_start = naive_start.isoformat() + 'Z'
+		stop_start = naive_stop.isoformat() + 'Z'
+		self.assertEqual(response.data['start'], zulu_start)
+		self.assertEqual(response.data['stop'], stop_start)
+
+
+	def test_create_happening_CET(self):
+		l = LocationFactory()
+		data = self.data.copy()
+		data['location'] = l.id
+
+
+		naive_start = datetime.datetime.utcnow()
+		naive_stop = naive_start + datetime.timedelta(hours=4)
+
+		cet = pytz.timezone('CET')		
+		start = cet.localize(naive_start).isoformat()
+		stop = cet.localize(naive_stop).isoformat()
+
 		data['start'], data['stop'] = start, stop
 		response = self.client.post(self.list_url, data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-		data['id'] = response.data['id']
-		self.assertEqual(response.data, data)
+		self.assertEqual(response.data['start'], start)
+		self.assertEqual(response.data['stop'], stop)
+
+
+	def test_create_happening_EST(self):
+		l = LocationFactory()
+		data = self.data.copy()
+		data['location'] = l.id
+
+
+		naive_start = datetime.datetime.utcnow()
+		naive_stop = naive_start + datetime.timedelta(hours=4)
+
+		est = pytz.timezone('EST')		
+		start = est.localize(naive_start).isoformat()
+		stop = est.localize(naive_stop).isoformat()
+
+		data['start'], data['stop'] = start, stop
+		response = self.client.post(self.list_url, data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		self.assertEqual(response.data['start'], start)
+		self.assertEqual(response.data['stop'], stop)
 
 	def test_list_get_happening(self):
 		HappeningFactory()
@@ -61,8 +126,16 @@ class HappeningTests(APITestCase):
 		query = {'url': hl.url}
 		response = self.client.get(self.list_url, query, format='json')
 		found_h = response.data[0]
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), 1)
 		self.assertEqual(found_h['name'], h.name)
+
+	def test_bad_link_get_happening(self):
+		hl = HappeningLinkFactory()
+		query = {'url': 'httpL//somebull.com'}
+		response = self.client.get(self.list_url, query, format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class ArtistTests(APITestCase):
 	list_url = reverse('happenings:api-artists-list')
@@ -119,6 +192,13 @@ class ArtistTests(APITestCase):
 		found_a = response.data[0]
 		self.assertEqual(len(response.data), 1)
 		self.assertEqual(found_a['name'], a.name)
+
+	def test_bad_link_get_happening(self):
+		hl = ArtistLinkFactory()
+		query = {'url': 'httpL//somebull.com'}
+		response = self.client.get(self.list_url, query, format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class LocationTests(APITestCase):
 	list_url = reverse('happenings:api-locations-list')
@@ -181,9 +261,16 @@ class LocationTests(APITestCase):
 		query = {'url': link.url}
 		response = self.client.get(self.list_url, query, format='json')
 		found_l = response.data[0]
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(len(response.data), 1)
 		self.assertEqual(found_l['name'], l.name)
 
+	def test_bad_link_get_location(self):
+		LocationLinkFactory()
+		query = {'url': 'http://someurl.com'}
+		response = self.client.get(self.list_url, query, format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+		
 
 class ThirdPartyTests(APITestCase):
 	list_url = reverse('happenings:api-thirdparties-list')
@@ -245,6 +332,23 @@ class ThirdPartyTests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data['name'], 'thirdparty1')
 
+	def test_url_get_thirdparty(self):
+		tp = ThirdPartyFactory()
+		ThirdPartyFactory()
+		query = {'url': tp.url}
+		response = self.client.get(self.list_url, query, format='json')
+		found_tp = response.data[0]
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(response.data), 1)
+		self.assertEqual(found_tp['name'], tp.name)
+
+	def test_bad_url_get_thirdparty(self):
+		tp = ThirdPartyFactory()
+		ThirdPartyFactory()
+		query = {'url': 'http://someotherstuff.com'}
+		response = self.client.get(self.list_url, query, format='json')
+		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+		
 class PerformanceTests(APITestCase):
 	list_url = reverse('happenings:api-performances-list')
 
@@ -299,7 +403,8 @@ class LocationLinkTests(APITestCase):
 	def test_create_locationlink(self):
 		tp = ThirdPartyFactory()
 		l = LocationFactory()
-		data = {'third_party': tp.id, 'location': l.id, 'url': 'http://someurl.com'}
+		data = {'third_party': tp.id, 'location': l.id, 'url': 'http://someurl.com',
+				'category': 'REPR', 'identifier': 'foo'}
 		
 		response = self.client.post(self.list_url, data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -319,8 +424,8 @@ class LocationLinkTests(APITestCase):
 		LocationFactory.reset_sequence()
 		ThirdPartyFactory.reset_sequence()
 		l = LocationFactory()
-		LocationLinkFactory(location=l)
-		LocationLinkFactory(location=l)
+		ll1 = LocationLinkFactory(location=l)
+		ll2 = LocationLinkFactory(location=l)
 		l_url = reverse('happenings:api-location-detail', kwargs={'pk': l.id})
 		response = self.client.get(l_url, format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -329,6 +434,7 @@ class LocationLinkTests(APITestCase):
 		self.assertEqual([{'third_party': 'thirdparty1', 'url': 'http://thirdparty1.com/location1'},
 						  {'third_party': 'thirdparty2', 'url': 'http://thirdparty2.com/location1'}],
 						   links)
+
 
 
 class ArtistLinkTests(APITestCase):
@@ -345,7 +451,8 @@ class ArtistLinkTests(APITestCase):
 	def test_create_lartistlink(self):
 		tp = ThirdPartyFactory()
 		a = ArtistFactory()
-		data = {'third_party': tp.id, 'artist': a.id, 'url': 'http://someurl.com'}
+		data = {'third_party': tp.id, 'artist': a.id, 'url': 'http://someurl.com',
+				'category': 'REPR', 'identifier': 'foo'}
 		
 		response = self.client.post(self.list_url, data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -365,26 +472,34 @@ class ArtistLinkTests(APITestCase):
 		ArtistFactory.reset_sequence()
 		ThirdPartyFactory.reset_sequence()
 		a = ArtistFactory()
-		ArtistLinkFactory(artist=a)
-		ArtistLinkFactory(artist=a)
+		al1 = ArtistLinkFactory(artist=a)
+		al2 = ArtistLinkFactory(artist=a)
 		a_url = reverse('happenings:api-artist-detail', kwargs={'pk': a.id})
 		response = self.client.get(a_url, format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		links = response.data['links']
 		self.assertEqual(2, len(links))
-		self.assertEqual([{'third_party': 'thirdparty1', 'url': 'http://thirdparty1.com/artist1'},
-						  {'third_party': 'thirdparty2', 'url': 'http://thirdparty2.com/artist1'}],
+		self.assertEqual([{'third_party': 'thirdparty1', 'url': al1.url},
+						  {'third_party': 'thirdparty2', 'url': al2.url}],
 						   links)
 
-	def test_link_get_artist(self):
-		a = ArtistFactory()
-		ArtistFactory()
-		link = ArtistLinkFactory(artist=a)
-		query = {'url': link.url}
-		response = self.client.get(self.list_url, query, format='json')
-		found_link = response.data[0]
-		self.assertEqual(len(response.data), 1)
-		self.assertEqual(found_link['url'], link.url)
+	def test_no_sample_lookup_repr_links(self):
+		url = reverse('happenings:api-artistlinks-no-samples')
+		tp = ThirdPartyFactory()
+		links = make_no_sample_artist_links(tp, retrn='links')
+		link_urls = {l.url for l in links}
+		query = {'third_party': tp.id}
+		response = self.client.get(url, query, format='json')
+		found_links = {l['url'] for l in response.data}
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(found_links), 2)
+		self.assertEqual(found_links, link_urls)
+
+		response = self.client.get(url, {}, format='json')
+		self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+		
+
 
 class HappeningLinksTests(APITestCase):
 	list_url = reverse('happenings:api-happeninglinks-list')
@@ -400,7 +515,8 @@ class HappeningLinksTests(APITestCase):
 	def test_create_happeninglink(self):
 		tp = ThirdPartyFactory()
 		h = HappeningFactory()
-		data = {'third_party': tp.id, 'happening': h.id, 'url': 'http://someurl.com'}
+		data = {'third_party': tp.id, 'happening': h.id, 'url': 'http://someurl.com',
+				'category': 'REPR', 'identifier': 'foo'}
 		
 		response = self.client.post(self.list_url, data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -420,14 +536,14 @@ class HappeningLinksTests(APITestCase):
 		HappeningFactory.reset_sequence()
 		ThirdPartyFactory.reset_sequence()
 		h = HappeningFactory()
-		HappeningLinkFactory(happening=h)
-		HappeningLinkFactory(happening=h)
+		hl1 = HappeningLinkFactory(happening=h)
+		hl2 = HappeningLinkFactory(happening=h)
 		h_url = reverse('happenings:api-happening-detail', kwargs={'pk': h.id})
 		response = self.client.get(h_url, format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		links = response.data['links']
 		self.assertEqual(2, len(links))
-		self.assertEqual([{'third_party': 'thirdparty1', 'url': 'http://thirdparty1.com/happening1'},
-						  {'third_party': 'thirdparty2', 'url': 'http://thirdparty2.com/happening1'}],
+		self.assertEqual([{'third_party': 'thirdparty1', 'url': hl1.url},
+						  {'third_party': 'thirdparty2', 'url': hl2.url}],
 						   links)
 		

@@ -38,6 +38,7 @@ urlpatterns = patterns('',
 	url(r'^api/artists/(?P<pk>\d+)/$', views.ArtistDetail.as_view(), name='api-artist-detail'),
 	url(r'^api/artists/$', views.ArtistList.as_view(), name='api-artists-list'),
 	url(r'^api/artists/links/$', views.ArtistLinkList.as_view(), name='api-artistlinks-list'),
+	url(r'^api/artists/links/no-samples/$', views.ArtistLinkNoSamplesList.as_view(), name='api-artistlinks-no-samples'),
 
 	url(r'^api/happenings/(?P<pk>\d+)/$', views.HappeningDetail.as_view(), name='api-happening-detail'),
 	url(r'^api/happenings/$', views.HappeningList.as_view(), name='api-happenings-list'),
@@ -47,9 +48,9 @@ urlpatterns = patterns('',
 	url(r'^api/thirdparties/$', views.ThirdPartyList.as_view(), name='api-thirdparties-list'),
 
 	#url(r'^api/performances/(?P<pk>\d+)/$', location_detail, name='api-location-detail'),
-	url(r'^api/performances/$', performance_list, name='api-performances-list')
+	url(r'^api/performances/$', performance_list, name='api-performances-list'),
 
-	#url(r'^api/', views.api_root) # with a $ this breaks, without is hast to be the last item!
+	url(r'^api/$', views.api_root) # with a $ this breaks, without is hast to be the last item!
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

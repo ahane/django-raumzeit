@@ -1,6 +1,6 @@
 from django.contrib import admin
-from happenings.models import Happening, HappeningLink, ThirdParty, Location, Artist, Performance
-admin.site.register([HappeningLink, ThirdParty, Location, Performance, Artist])
+from happenings.models import Happening, HappeningLink, ThirdParty, Location, Artist, Performance, LocationLink, ArtistLink
+admin.site.register([HappeningLink, ThirdParty, Location, Performance, Artist, LocationLink, ArtistLink])
 
 # Register your models here.
 

@@ -1,4 +1,9 @@
 import datetime 
+import pytz
+
+def now_utc():
+	utc = pytz.utc
+	return utc.localize(datetime.datetime.utcnow())
 
 class UTC(datetime.tzinfo):
 	    """UTC"""
@@ -23,3 +28,4 @@ class CET(datetime.tzinfo):
 
 	    def dst(self, dt):
 	        return None
+

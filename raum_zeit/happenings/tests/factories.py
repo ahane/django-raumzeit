@@ -2,7 +2,7 @@ import factory
 import datetime
 from happenings.util import UTC
 from happenings.models import Happening, HappeningLink, Artist, ArtistLink, Location, LocationLink, ThirdParty, Performance
-
+#import pytz
 ########################
 # Helper Factories
 ########################
@@ -78,8 +78,9 @@ class ArtistLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	artist = factory.SubFactory(ArtistFactory)
-	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.artist))
+	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.artist, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.artist.id)
+	category = 'REPR'
 
 
 class PerformanceFactory(factory.django.DjangoModelFactory):
@@ -102,6 +103,34 @@ class HappeningWithLinksFactory(HappeningFactory):
 ########################
 # Collections Factories
 ########################
+
+def make_no_sample_artist_links(third_party, retrn='artist'):
+	""" Creates 2 artists with just 'REPR' links for given third_party 
+		and one artist with both 'REPR' and 'SMPL' links.
+		Returns just the ones without samples.
+	"""
+	tp1 = third_party
+	tp2 = ThirdPartyFactory() # we add another tp just to make sure
+	
+	a1 = ArtistFactory()
+	al1 = ArtistLinkFactory(artist=a1, category='REPR', third_party=tp1)
+	ArtistLinkFactory(artist=a1, category='REPR', third_party=tp2)
+
+	a2 = ArtistFactory()
+	al2 = ArtistLinkFactory(artist=a2, category='REPR', third_party=tp1)
+	ArtistLinkFactory(artist=a2, category='REPR', third_party=tp2)
+	
+	a3 = ArtistFactory()
+	ArtistLinkFactory(artist=a3, category='REPR', third_party=tp1)
+	ArtistLinkFactory(artist=a3, category='SMPL', third_party=tp1)
+	ArtistLinkFactory(artist=a3, category='REPR', third_party=tp2)
+
+	if retrn == 'artist':
+		return a1, a2
+	elif retrn == 'links':
+		return al1, al2
+	else:
+		raise ValueError
 
 
 

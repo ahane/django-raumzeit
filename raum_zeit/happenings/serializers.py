@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from happenings.models import Artist, Location, Happening, ThirdParty, LocationLink, ArtistLink, HappeningLink, Performance
 entity_fields = ['id', 'name', 'description', 'links']
-link_fields = ['id', 'url', 'third_party']
+link_fields = ['id', 'url', 'third_party', 'category', 'identifier']
+
 class LocationLinkSlimSerializer(serializers.ModelSerializer):
 	third_party = serializers.SlugRelatedField(slug_field='name', read_only=True)
 	class Meta:

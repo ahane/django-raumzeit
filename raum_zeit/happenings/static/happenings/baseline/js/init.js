@@ -3,7 +3,6 @@
 (function($) {
 
 	skel.init({
-		prefix: 'static/happenings/baseline/',
 		reset: 'full',
 		breakpoints: {
 			global: {
