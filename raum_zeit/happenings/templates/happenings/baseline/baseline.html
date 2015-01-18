@@ -12,8 +12,15 @@
 		<script src="{% static 'happenings/baseline/js/jquery.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel-layers.min.js' %}"></script>
+		<script src="https://w.soundcloud.com/player/api.js" ></script>
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
+		</script>
+		<script>
+			window.load_track = function (track_url) {
+				var widget = SC.Widget('sc-widget');
+				widget.load(track_url);
+			};
 		</script>
 		<noscript>
 			<link rel="stylesheet" href="{% static 'happenings/baseline/css/skel.css' %}" />

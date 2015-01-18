@@ -37,7 +37,10 @@
 			{% if happening.artists.all %}
 				<div class="row">
 				{% for artist in happening.artists.all %}
-					<div class="6u"><p class="medium">{{ artist.name }}</p></div>
+					<div class="6u">
+						<p class="medium">{{ artist.name }}
+						<i onclick="window.load_track('https://api.soundcloud.com/tracks/172033444')"class="fa fa-play-circle-o"></i></p>
+					</div>
 				{% endfor %}
 				</div>
 				<hr class="minor" />

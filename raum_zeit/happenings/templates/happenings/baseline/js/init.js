@@ -41,6 +41,15 @@
 				},
 				plugins: {
 					layers: {
+						infoBox: {
+							position: 'bottom',
+							width: '500',
+							height: '7em',
+							animation: 'overlayY',
+							//hidden: true,
+							html: '<div class="paper"><iframe  id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites" width="100%" height="60" scrolling="no" frameborder="no" like="no" buying="no" show_playcount="no"></iframe></div>'
+						},
+
 						config: {
 							mode: 'transform'
 						},
