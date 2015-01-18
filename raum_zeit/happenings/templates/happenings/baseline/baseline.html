@@ -17,10 +17,21 @@
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
 		<script>
-			window.load_track = function (track_url) {
-				var widget = SC.Widget('sc-widget');
-				widget.load(track_url);
-			};
+
+
+			$(document).ready(function() {  
+    			var artistItems = $('.artist-item');
+
+				artistItems.click(function (event) {
+					var trackUrl = $(this).data('soundcloud-track');
+					if (typeof(trackUrl) != "undefined") {
+						var widget = SC.Widget('sc-widget');
+						widget.load(trackUrl, {'auto_play': true});
+						widget.play();
+					}
+				}); 
+			
+			});
 		</script>
 		<noscript>
 			<link rel="stylesheet" href="{% static 'happenings/baseline/css/skel.css' %}" />

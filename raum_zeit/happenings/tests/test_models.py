@@ -151,9 +151,27 @@ class HappeningQueryTest(TestCase):
 		self.assertFalse(present.is_future())
 		self.assertTrue(future.is_future())
 
-	#Jan. 15, 2015, 11:59 p.m.Jan. 16, 2015, noon
+class ArtistMethodsTest(TestCase):
 
-	
+	def test_filter_links(self):
+		tp1 = ThirdPartyFactory()
+		tp2 = ThirdPartyFactory()
+		a = ArtistFactory()
+		l1 = ArtistLinkFactory(artist=a, third_party=tp1, category='REPR')
+		l2 = ArtistLinkFactory(artist=a,third_party=tp2, category='REPR')
+		s1 = ArtistLinkFactory(artist=a,third_party=tp1, category='SMPL')
+		s2 = ArtistLinkFactory(artist=a, third_party=tp2, category='SMPL')
+
+		links_smpl = set(a.links_with(category='SMPL'))
+		self.assertEquals({s1, s2}, links_smpl)
+
+		links_repr = set(a.links_with(category='REPR'))
+		self.assertEquals({l1, l2}, links_repr)
+
+		links_smpl_tp1 = set(a.links_with(category='SMPL', third_party_name=tp1.name))
+		self.assertEquals({s1}, links_smpl_tp1)
+
+
 
 class ArtistQueryTest(TestCase):
 

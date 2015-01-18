@@ -1,5 +1,8 @@
 {% extends 'happenings/baseline/baseline.html' %}
 {% load humanize %}
+{% load link %}
+
+
 {% block nav %}
 <li><a href="#top" class="button default">Happenings</a></li>
 <li><a href="#content">Locations</a></li>
@@ -8,8 +11,7 @@
 
 {% block banner %}
 <section id="banner">
-	<h2>Find out whats happening.</h2>
-	<h3>{% now "jS \o\f F G e"%}</h3>
+	<h2>Find out whats happening now</h2>
 </section>
 {% endblock %}
 
@@ -27,23 +29,37 @@
 					<address><p class="tiny">{{ happening.location.address }}</p></address>
 				</div>
 				<div class="-2u$">
-					<i class="fa fa-map-marker"></i>
+					<!--<i class="fa fa-map-marker fa-lg"></i>-->
 				</div>
 			</div>
 			<!-- Location -->
 			
 			<hr class="minor" />
  			<!- Artists -->
-			{% if happening.artists.all %}
-				<div class="row">
-				{% for artist in happening.artists.all %}
-					<div class="6u">
-						<p class="medium">{{ artist.name }}
-						<i onclick="window.load_track('https://api.soundcloud.com/tracks/172033444')"class="fa fa-play-circle-o"></i></p>
-					</div>
-				{% endfor %}
+			{% if happening.artists.all.exists %}
+			<div class="row">
+				<div class="12u$">
+
+					<ul class="artists">
+							{% for artist in happening.artists.all %}
+							{% with artist.links.all as links %}
+								
+								{% with links|with_category:"SMPL"|with_third_party:"SoundCloud"|first as sc_sample_track %}
+								{% if sc_sample_track %}
+								<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">{{ artist.name }}</li>	
+								{% else %}
+								<li class="artist-item">{{ artist.name }}</li>
+								{% endif %}
+							
+								{% endwith %}		
+								{% with links|with_category:"REPR" as rep_links %}
+								{% endwith %}	
+							{% endwith %}		
+							{% endfor %}
+					</ul>
 				</div>
-				<hr class="minor" />
+			</div>
+			<hr class="minor" />
 			{% endif %}
 			<!-- End Artists -->
 
@@ -69,6 +85,6 @@
 			
 		</div> <!-- End Paper -->
 	</div> 
-{% endfor %}
+{% endfor %}<!-- End iteration over happenigns -->
 </div>
 {% endblock %}

@@ -718,22 +718,34 @@ input[type="button"],
     margin-bottom: 0.3em;
     font-weight: 300; }
   .paper h2 {
-    font-weight: 300;
     font-size: 200%; }
   .paper h3 {
-    font-weight: 300;
     font-size: 135%; }
-  .paper p.tiny {
+  .paper .tiny {
     font-size: 80%;
     font-weight: 300;
     margin-bottom: 0.6em; }
-  .paper p.medium {
+  .paper .medium {
     font-size: 110%;
     font-weight: 300;
     margin-bottom: 0.8em; }
-  .paper p.big {
+  .paper .big {
     font-size: 140%;
     font-weight: 400;
     margin-bottom: 0.8em; }
+
+ul.artists {
+  list-style: none;
+  margin: 0;
+  padding-left: 0; }
+  ul.artists li {
+    /*border-top: solid $size-border-width $color-border;*/
+    padding: 0.5em 0; }
+    ul.artists li:first-child {
+      border-top: 0;
+      padding-top: 0; }
+  ul.artists li[data-soundcloud-track] {
+    font-weight: 400;
+    cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

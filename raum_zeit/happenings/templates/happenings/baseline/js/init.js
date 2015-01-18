@@ -43,11 +43,11 @@
 					layers: {
 						infoBox: {
 							position: 'bottom',
-							width: '500',
-							height: '7em',
+							width: '30%',
+							height: '8em',
 							animation: 'overlayY',
 							//hidden: true,
-							html: '<div class="paper"><iframe  id="sc-widget" src="https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites" width="100%" height="60" scrolling="no" frameborder="no" like="no" buying="no" show_playcount="no"></iframe></div>'
+							html: '<div class="paper"><iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1848538&show_artwork=false&show_like=false&buying=false"  width="100%" height="80" scrolling="no" frameborder="no"></iframe></div>'
 						},
 
 						config: {

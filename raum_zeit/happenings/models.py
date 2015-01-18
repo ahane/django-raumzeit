@@ -47,8 +47,8 @@ class Link(models.Model):
 	CATEGORIES = (
 		(REPR, 'Page'),
 		(SAMPLE, 'Sample'),
-		(SEARCH, 'Search')
-		)
+		(SEARCH, 'Search'),
+	)
 
 	class Meta:
 		abstract = True
@@ -128,6 +128,15 @@ class Artist(models.Model):
 									through='ArtistLink', through_fields=('artist', 'third_party'))
 
 	objects = ArtistQuerySet.as_manager()
+
+	def links_with(self, category, third_party_name=None):
+		
+		category_links = self.links.filter(category=category)
+		
+		if third_party_name is not None:
+			return category_links.filter(third_party__name=third_party_name)
+
+		return category_links
 	
 class HappeningLink(Link):
 
@@ -145,10 +154,10 @@ class HappeningQuerySet(models.QuerySet, LinksQueryMixin):
 		return filtered
 
 	def with_artists(self):
-		return self.prefetch_related('artists')
+		return self.prefetch_related('artists__links__third_party')
 
 	def with_location(self):
-		return self.prefetch_related('location')
+		return self.prefetch_related('location').prefetch_related('location__links')
 
 
 class Performance(models.Model):
