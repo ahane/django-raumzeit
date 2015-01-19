@@ -23,7 +23,6 @@ class TestRunning(StaticLiveServerTestCase):
 
 	def tearDown(self):
 		self.browser.quit()
-		
 
 	def test_title(self):
 

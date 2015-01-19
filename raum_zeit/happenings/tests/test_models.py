@@ -22,21 +22,6 @@ class HappeningMethodsTest(TestCase):
 		h = HappeningFactory()
 		self.assertEqual(h.duration(), datetime.timedelta(hours=4))
 
-	def test_creation_with_links(self):
-		ThirdPartyFactory.reset_sequence()
-		HappeningFactory.reset_sequence()
-		
-		h = HappeningWithLinksFactory()
-		
-		links = h.links.all()
-		(self.assertIsInstance(link, HappeningLink) for link in links)
-		link_urls = {link.url for link in links}
-		self.assertEqual(link_urls, {'http://thirdparty1.com/happening1', 'http://thirdparty2.com/happening1'})
-
-		tps = h.third_parties.all()
-		(self.assertIsInstance(link, HappeningLink) for tp in tps)
-		tp_names = {tp.name for tp in tps}
-		self.assertEquals(tp_names, {'thirdparty1', 'thirdparty2'})
 
 	def test_ordering(self):
 		HappeningFactory.reset_sequence()
@@ -111,7 +96,7 @@ class HappeningQueryTest(TestCase):
 		HappeningWithLinksFactory()
 		HappeningWithLinksFactory()
 
-		happenings = Happening.objects.has_link('http://thirdparty1.com/happening1')
+		happenings = Happening.objects.has_link('http://thirdparty1.com/happening1/REPR')
 		h = happenings[0]
 		self.assertIsInstance(h, Happening)
 		self.assertEqual(h.name, 'happening1')

@@ -3,7 +3,10 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from happenings.tests.factories import *
+from django.contrib.auth.models import User
 import pytz
+
+USER = User.objects.get(username='scraper')
 
 def replace(dct, key, value):
 	d = dct.copy()
@@ -16,6 +19,9 @@ class HappeningTests(APITestCase):
 	data = {'name': 'Happening1', 
 			
 			'description': 'foobar', 'links': []}
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
 
 	def test_create_happening(self):
 		""" If an happening is created with a timezone naive
@@ -140,6 +146,10 @@ class HappeningTests(APITestCase):
 class ArtistTests(APITestCase):
 	list_url = reverse('happenings:api-artists-list')
 	data = {'name': 'Artist1', 'description': 'FooBar', 'links': []}
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
+
 	def test_create_artist(self):
 		
 		
@@ -204,6 +214,10 @@ class LocationTests(APITestCase):
 	list_url = reverse('happenings:api-locations-list')
 	data = {'name': 'Location1', 'description': 'FooBar',
 			    'lat': 13.1, 'lon': 51.1, 'address': 'somestreet'}
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
+
 	def test_create_location(self):
 	
 		response = self.client.post(self.list_url, self.data, format='json')
@@ -274,6 +288,10 @@ class LocationTests(APITestCase):
 
 class ThirdPartyTests(APITestCase):
 	list_url = reverse('happenings:api-thirdparties-list')
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
+
 	def test_create_thirdparty(self):
 		
 		data = {'name': 'TP1', 'url': 'http://someurl.com'}
@@ -352,6 +370,9 @@ class ThirdPartyTests(APITestCase):
 class PerformanceTests(APITestCase):
 	list_url = reverse('happenings:api-performances-list')
 
+	def setUp(self):
+		self.client.force_authenticate(USER)
+
 	def test_list_get_performances(self):
 		PerformanceFactory()
 		PerformanceFactory()
@@ -390,6 +411,9 @@ class PerformanceTests(APITestCase):
 
 class LocationLinkTests(APITestCase):
 	list_url = reverse('happenings:api-locationlinks-list')
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
 
 	def test_list_get_locationlink(self):
 		LocationLinkFactory()
@@ -431,14 +455,17 @@ class LocationLinkTests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		links = response.data['links']
 		self.assertEqual(2, len(links))
-		self.assertEqual([{'third_party': 'thirdparty1', 'url': 'http://thirdparty1.com/location1'},
-						  {'third_party': 'thirdparty2', 'url': 'http://thirdparty2.com/location1'}],
+		self.assertEqual([{'third_party': 'thirdparty1', 'url': 'http://thirdparty1.com/location1/REPR'},
+						  {'third_party': 'thirdparty2', 'url': 'http://thirdparty2.com/location1/REPR'}],
 						   links)
 
 
 
 class ArtistLinkTests(APITestCase):
 	list_url = reverse('happenings:api-artistlinks-list')
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
 
 	def test_list_get_artistlink(self):
 		ArtistLinkFactory()
@@ -503,6 +530,9 @@ class ArtistLinkTests(APITestCase):
 
 class HappeningLinksTests(APITestCase):
 	list_url = reverse('happenings:api-happeninglinks-list')
+
+	def setUp(self):
+		self.client.force_authenticate(USER)
 
 	def test_list_get_happeninglink(self):
 		HappeningLinkFactory()

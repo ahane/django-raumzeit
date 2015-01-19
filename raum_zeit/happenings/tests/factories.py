@@ -52,6 +52,7 @@ class HappeningLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	happening = factory.SubFactory(HappeningFactory)
+	category = 'REPR'
 	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.happening, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.happening.id)
 
@@ -61,6 +62,7 @@ class LocationLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	location = factory.SubFactory(LocationFactory)
+	category = 'REPR'
 	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.location, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.location.id)
 
@@ -78,9 +80,10 @@ class ArtistLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	artist = factory.SubFactory(ArtistFactory)
+	category = 'REPR'
 	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.artist, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.artist.id)
-	category = 'REPR'
+	
 
 
 class PerformanceFactory(factory.django.DjangoModelFactory):
