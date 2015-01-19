@@ -52,7 +52,7 @@ class HappeningLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	happening = factory.SubFactory(HappeningFactory)
-	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.happening))
+	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.happening, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.happening.id)
 
 class LocationLinkFactory(factory.django.DjangoModelFactory):
@@ -61,7 +61,7 @@ class LocationLinkFactory(factory.django.DjangoModelFactory):
 
 	third_party = factory.SubFactory(ThirdPartyFactory)
 	location = factory.SubFactory(LocationFactory)
-	url = factory.LazyAttribute(lambda o: '{0}/{1}'.format(o.third_party.url, o.location))
+	url = factory.LazyAttribute(lambda o: '{0}/{1}/{2}'.format(o.third_party.url, o.location, o.category))
 	identifier = factory.LazyAttribute(lambda o: o.location.id)
 
 

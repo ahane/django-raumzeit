@@ -12,6 +12,7 @@
 {% block banner %}
 <section id="banner">
 	<h2>Find out whats happening now</h2>
+	
 </section>
 {% endblock %}
 
@@ -42,19 +43,15 @@
 
 					<ul class="artists">
 							{% for artist in happening.artists.all %}
-							{% with artist.links.all as links %}
 								
-								{% with links|with_category:"SMPL"|with_third_party:"SoundCloud"|first as sc_sample_track %}
+								{% with artist.links.all|soundcloud|smpl|first as sc_sample_track %}
 								{% if sc_sample_track %}
-								<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">{{ artist.name }}</li>	
+									<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">{{ artist.name }}</li>
 								{% else %}
 								<li class="artist-item">{{ artist.name }}</li>
 								{% endif %}
 							
 								{% endwith %}		
-								{% with links|with_category:"REPR" as rep_links %}
-								{% endwith %}	
-							{% endwith %}		
 							{% endfor %}
 					</ul>
 				</div>
