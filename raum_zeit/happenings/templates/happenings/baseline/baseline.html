@@ -12,69 +12,74 @@
 		<script src="{% static 'happenings/baseline/js/jquery.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel-layers.min.js' %}"></script>
+
 		<script src="https://w.soundcloud.com/player/api.js" ></script>
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
+		<script src="{% static 'happenings/baseline/js/main.js' %}"></script>
 		<script>
 
 			
 
 
-			$(document).ready(function() {  
-				var infoBox = {
+			// $(document).ready(function() {  
+			// 	var infoBox = {
 
-					layer: skel.plugins.layers.get('infoBox'),
+			// 		layer: skel.plugins.layers.get('infoBox'),
 
-					hide: function () {
-						this.layer.hide();
-					},
-				};	
+			// 		hide: function () {
+			// 			this.layer.hide();
+			// 		},
+			// 	};	
 
-				var streamBox = {
+			// 	var streamBox = {
 
-					layer: skel.plugins.layers.get('streamBox'),
+			// 		layer: skel.plugins.layers.get('streamBox'),
 
-					hide: function () {
-						this.layer.hide();
-					},
+			// 		hide: function () {
+			// 			this.layer.hide();
+			// 		},
 
-					canStream: true,
-					allowStreaming: function (flag) { this.canStream = flag; },
+			// 		canStream: true,
+			// 		allowStreaming: function (flag) { this.canStream = flag; },
 
-					widget: SC.Widget('sc-widget'),
+			// 		widget: SC.Widget('sc-widget'),
 					
-					loadTrack: function (trackUrl) {
-						this.widget.load(trackUrl, {'auto_play': true});
+			// 		loadTrack: function (trackUrl) {
+			// 			this.widget.load(trackUrl, {'auto_play': true});
 
-					}
+			// 		}
 
-				};
+			// 	};
 
 							
 
-    			var artistItems = $('.artist-item');
+   //  			var artistItems = $('.artist-item');
 
-    			var mainButton = $('#mainButton');
+   //  			var mainButton = $('#mainButton');
     			
-    			mainButton.click(function (event) {
-    				infoBox.hide();
-    				streamBox.hide();
-    				streamBox.allowStreaming(false);
+   //  			mainButton.click(function (event) {
+   //  				infoBox.hide();
+   //  				streamBox.hide();
+   //  				streamBox.allowStreaming(false);
 
-    			});
+   //  			});
+
+   //  			var 
+
     			
-				artistItems.click(function (event) {
-					var trackUrl = $(this).data('soundcloud-track');
-					if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
-						infoBox.hide()
-						streamBox.loadTrack(trackUrl);
-					}
-				}); 
+			// 	artistItems.click(function (event) {
+			// 		var trackUrl = $(this).data('soundcloud-track');
+			// 		if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
+			// 			infoBox.hide()
+			// 			streamBox.loadTrack(trackUrl);
+			// 		}
+			// 	}); 
 
 
 			
-			});
+			// });
 		</script>
 		<noscript>
 			<link rel="stylesheet" href="{% static 'happenings/baseline/css/skel.css' %}" />

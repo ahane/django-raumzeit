@@ -76,8 +76,8 @@ class Location(models.Model):
 
 	name = models.CharField(max_length=200)
 	address = models.CharField(max_length=200)
-	lat = LatitudeField()
-	lon = LongitudeField()
+	lat = LatitudeField(null=True, blank=True)
+	lon = LongitudeField(null=True, blank=True)
 	description = models.CharField(max_length=200, default='')
 	third_parties = models.ManyToManyField(ThirdParty, 
 									through='LocationLink', through_fields=('location', 'third_party'))
