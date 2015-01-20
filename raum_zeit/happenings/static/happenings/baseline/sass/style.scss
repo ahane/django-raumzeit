@@ -993,5 +993,13 @@
 		
 }
 
-
-
+/* fix anchor links hiding headings behind toolbar
+https://github.com/twbs/bootstrap/issues/1768
+*/
+*[id]:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -75px; 
+  height: 75px; 
+  visibility: hidden; 
+}

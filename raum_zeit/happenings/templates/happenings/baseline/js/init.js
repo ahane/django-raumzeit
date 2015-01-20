@@ -41,16 +41,6 @@
 				},
 				plugins: {
 					layers: {
-						// infoBoxSmall: {
-						// 	position: 'bottom',
-						// 	width: '400',
-						// 	maxWidth: '30%',
-						// 	height: '150',
-
-						// 	//animation: 'overlayY',
-						// 	//hidden: true,
-						// 	html: '<div id="skel-layers-fixed"><div class="paper"><p>dd</p><p></p></div></div>'
-						// },
 						
 
 						streamBox: {

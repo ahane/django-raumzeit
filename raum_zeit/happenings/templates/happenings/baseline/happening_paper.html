@@ -1,0 +1,71 @@
+{% load humanize %}
+{% load link %}
+	<div class="paper">
+
+		<!-- Location -->
+		<div class="row">
+			<div class="12u">
+				<h2>{{ happening.location.name }}</h2>
+			</div>
+			<div class="10u">
+				<address><p class="tiny">{{ happening.location.address }}</p></address>
+			</div>
+			<div class="-2u$">
+				<a href="{{ happening.location.address|googlemaps }}">
+					<i class="fa fa-map-marker fa-lg"></i>
+				</a>
+			</div>
+		</div>
+		<!-- Location -->
+		
+		<hr class="minor" />
+			<!- Artists -->
+		{% if happening.artists.all.exists %}
+		<div class="row">
+			<div class="12u$">
+
+				<ul class="artists">
+						{% for artist in happening.artists.all %}
+							
+							{% with artist.links.all|soundcloud|smpl|first as sc_sample_track %}
+							{% if sc_sample_track %}
+								<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">
+									{{ artist.name }} <i class="fa fa-play-circle"></i>
+								</li>
+							{% else %}
+							<li class="artist-item">{{ artist.name }}</li>
+							{% endif %}
+						
+							{% endwith %}		
+						{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<hr class="minor" />
+		{% endif %}
+		<!-- End Artists -->
+
+		
+		<div class="row"> <!-- Happening -->
+			<div class="10u"><h4>{{ happening.name }}</h4></div>
+			<div class="1$">
+				<a href="{% url 'happenings:happening_detail' happening.id %}"><i class="fa fa-link fa-lg"></i></a>
+			</div>
+			<div class="12u$ ">
+				<h3>
+				{% if happening.is_future %}
+					starts {{ happening.start|naturaltime }}
+
+				{% elif happening.is_active %}
+					ends {{ happening.stop|naturaltime }}
+
+				{% elif happening.is_past %}
+					ended {{ happening.stop|naturaltime }}
+				{% endif %}
+				</h3>
+			</div>
+		</div>
+		<!-- End Happening -->
+	
+		
+</div> <!-- End Paper -->

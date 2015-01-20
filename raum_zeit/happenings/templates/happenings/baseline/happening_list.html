@@ -1,12 +1,12 @@
 {% extends 'happenings/baseline/baseline.html' %}
-{% load humanize %}
-{% load link %}
+
+
 
 
 {% block nav %}
-<li><a href="#top" class="button default">Happenings</a></li>
+<!-- <li><a href="#top" class="button default">Happenings</a></li>
 <li><a href="#content">Locations</a></li>
-<li><a href="#elements">Artists</a></li>
+<li><a href="#elements">Artists</a></li> -->
 {% endblock %}
 
 {% block banner %}
@@ -20,82 +20,10 @@
 <div class="row uniform">
 {% for happening in object_list %}
 	<div class="4u{% cycle '' '' '$' %} 6u(medium) 12u$(xsmall)">
-		<div class="paper">
-			<!-- Location -->
-			<div class="row">
-				<div class="12u">
-					<h2>{{ happening.location.name }}</h2>
-				</div>
-				<div class="10u">
-					<address><p class="tiny">{{ happening.location.address }}</p></address>
-				</div>
-				<div class="-2u$">
-					<!--<i class="fa fa-map-marker fa-lg"></i>-->
-				</div>
-			</div>
-			<!-- Location -->
-			<!-- <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1848538&show_artwork=false&show_like=false&buying=false"  width="100%" height="80" scrolling="no" frameborder="no"></iframe> -->
-			<hr class="minor" />
- 			<!- Artists -->
-			{% if happening.artists.all.exists %}
-			<div class="row">
-				<div class="12u$">
-
-					<ul class="artists">
-							{% for artist in happening.artists.all %}
-								
-								{% with artist.links.all|soundcloud|smpl|first as sc_sample_track %}
-								{% if sc_sample_track %}
-									<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">{{ artist.name }}</li>
-								{% else %}
-								<li class="artist-item">{{ artist.name }}</li>
-								{% endif %}
-							
-								{% endwith %}		
-							{% endfor %}
-					</ul>
-				</div>
-			</div>
-			<hr class="minor" />
-			{% endif %}
-			<!-- End Artists -->
-
-			
-			<div class="row"> <!-- Happening -->
-				<div class="12$"><h4>{{ happening.name }}</h4></div>
-				<div class="12u$ ">
-					<h3>
-					{% if happening.is_future %}
-						starts {{ happening.start|naturaltime }}
-
-					{% elif happening.is_active %}
-						ends {{ happening.stop|naturaltime }}
-
-					{% elif happening.is_past %}
-						ended {{ happening.stop|naturaltime }}
-					{% endif %}
-					</h3>
-				</div>
-			</div>
-			<!-- End Happening -->
-		
-			
-		</div> <!-- End Paper -->
+		<a id="{{happening.id}}"></a>
+		{% include 'happenings/baseline/happening_paper.html' %}
 	</div> 
 {% endfor %}<!-- End iteration over happenigns -->
-<div class="skel-layers-fixed paper" id="infoBox">
-	<div class="row" id="infoBoxRow"> 
-		<div class="-3u 6u$ 12u$(small)"><a id="mainButton" class="button">Worried about megabytes?</a></div>
-		<div class="-3u 6u$ 12u$(small)"><p>I'll eat them up if you don't stop me</p></div>
-	</div>
-</div>
-<div class="skel-layers-fixed" id="streamBox">
-	<div class="row">
-		<div class="-3u 6u$ 12u$(small)">
-			<div>
-				<iframe  id="sc-widget" src="https://w.soundcloud.com/player/?url=''" width="400" height="80" scrolling="no" frameborder="no" like="no" buying="no" show_playcount="no"></iframe>
-			</div>
-		</div>
-	</div>
-</div>
+{% include 'happenings/baseline/bottom_boxes.html' %}
 {% endblock %}
+

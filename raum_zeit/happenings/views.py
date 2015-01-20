@@ -17,6 +17,12 @@ from happenings.models import Happening, HappeningLink, Location, LocationLink, 
 
 
 
+def make_timespan(hours=12):
+	now = datetime.datetime.now()
+	after = datetime.datetime(now.year, now.month, now.day, now.hour)
+	before = after + datetime.timedelta(hours=hours)
+	return after, before
+
 ###########################
 # HTML Views
 ###########################
@@ -32,21 +38,26 @@ class HappeningListView(generic.ListView):
 		return Happening.objects.with_artists().with_location()
 
 
-class CurrentHappeningListView(generic.ListView):
+class CurrentHappeningCardView(generic.ListView):
 	model = Happening
 	template_name = 'happenings/baseline/happening_list.html'
 	def get_queryset(self):
-		#after = self.requests.after
-		#before = self.request.before
-		after = datetime.datetime.now()
-		before = after + datetime.timedelta(hours=12)
+		after, before =  make_timespan()
+		timespan_happenings = Happening.objects.in_timespan(after=after, before=before)
+		return timespan_happenings.with_artists().with_location()
+
+class CurrentLocationsListView(generic.ListView):
+	model = Happening
+	template_name = 'happenings/baseline/happening_list.html'
+	def get_queryset(self):
+		after, before =  make_timespan()
 		timespan_happenings = Happening.objects.in_timespan(after=after, before=before)
 		return timespan_happenings.with_artists().with_location()
 
 
 class HappeningDetailView(generic.DetailView):
 	model = Happening
-	template_name = 'happenings/happening_detail.html'
+	template_name = 'happenings/baseline/happening_detail.html'
 
 ###########################
 # API Exceptions

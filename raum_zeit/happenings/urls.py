@@ -26,10 +26,12 @@ performance_list = views.PerformanceViewSet.as_view({
 
 urlpatterns = patterns('',
 	url(r'^$', views.homepage_view, name='homepage'),
-	url(r'^berlin/$', views.CurrentHappeningListView.as_view(), name='current_happenings_list'),
-	url(r'^happenings/$', views.HappeningListView.as_view(), name='happenings_list'),
-	url(r'^(?P<pk>\d+)/$', views.HappeningDetailView.as_view(), name='happening_detail'),
-	
+	url(r'^berlin$', views.CurrentHappeningCardView.as_view(), name='current_happenings_list'),
+	url(r'^happenings$', views.HappeningListView.as_view(), name='happenings_list'),
+	url(r'^happenings/(?P<pk>\d+)/$', views.HappeningDetailView.as_view(), name='happening_detail'),
+	# url(r'^berlin/locations$', views.CurrentLocationsListView.as_view(), name='current_locations_list'),
+	# url(r'^berlin/artists$', views.CurrentArtistsListView.as_view(), name='current_artist_list'),
+		
 	
 	url(r'^api/locations/(?P<pk>\d+)/$', views.LocationDetail.as_view(), name='api-location-detail'),
 	url(r'^api/locations/$', views.LocationList.as_view(), name='api-locations-list'),

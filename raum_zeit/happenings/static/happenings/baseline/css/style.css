@@ -14,7 +14,7 @@ body, input, select, textarea {
   line-height: 1.65em; }
 
 a {
-  color: #49bf9d;
+  color: #DB5560;
   text-decoration: underline; }
   a:hover {
     text-decoration: none; }
@@ -177,8 +177,8 @@ textarea {
   input[type="email"]:focus,
   select:focus,
   textarea:focus {
-    border-color: #49bf9d;
-    box-shadow: 0 0 0 1px #49bf9d; }
+    border-color: #DB5560;
+    box-shadow: 0 0 0 1px #DB5560; }
 
 .select-wrapper {
   text-decoration: none;
@@ -269,8 +269,8 @@ input[type="radio"] {
     content: '\f00c'; }
   input[type="checkbox"]:focus + label:before,
   input[type="radio"]:focus + label:before {
-    border-color: #49bf9d;
-    box-shadow: 0 0 0 1px #49bf9d; }
+    border-color: #DB5560;
+    box-shadow: 0 0 0 1px #DB5560; }
 
 input[type="checkbox"] + label:before {
   border-radius: 4px; }
@@ -565,18 +565,18 @@ input[type="button"],
   input[type="reset"].special,
   input[type="button"].special,
   .button.special {
-    background-color: #49bf9d;
+    background-color: #DB5560;
     color: #ffffff !important; }
     input[type="submit"].special:hover,
     input[type="reset"].special:hover,
     input[type="button"].special:hover,
     .button.special:hover {
-      background-color: #5cc6a7; }
+      background-color: #df6a74; }
     input[type="submit"].special:active,
     input[type="reset"].special:active,
     input[type="button"].special:active,
     .button.special:active {
-      background-color: #3eb08f; }
+      background-color: #d7404c; }
   input[type="submit"].disabled, input[type="submit"]:disabled,
   input[type="reset"].disabled,
   input[type="reset"]:disabled,
@@ -767,5 +767,15 @@ ul.artists {
   padding: 1.5em;
   background-color: white;
   box-shadow: 1px -1px 15px #888888; }
+
+/* fix anchor links hiding headings behind toolbar
+https://github.com/twbs/bootstrap/issues/1768
+*/
+*[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -75px;
+  height: 75px;
+  visibility: hidden; }
 
 /*# sourceMappingURL=style.css.map */

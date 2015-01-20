@@ -16,6 +16,33 @@
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
+		
+		<!-- Google Analytics Opt-Out Cookie -->
+		<script>
+				var gaProperty = 'UA-XXXXXXX-X';
+				var disableStr = 'ga-disable-' + gaProperty;
+				if (document.cookie.indexOf(disableStr + '=true') > -1) {
+				  window[disableStr] = true;
+				}
+				function gaOptout() {
+				  document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+				  window[disableStr] = true;
+				}
+
+		</script>
+
+		<!-- Google Analytics Anonymous Tracking-->
+		<script>
+			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+			  ga('create', 'UA-54633103-2', 'auto');
+			  ga('send', 'pageview');
+			  ga('set', 'anonymizeIp', true);
+
+		</script>
 		<script>
 
 			
@@ -86,14 +113,14 @@
 	<body id="top">
 
 		<header id="header" class="skel-layers-fixed">
-			<h1><a href="#">dasgeht</a></h1>
+			<h1><a href="#">dasgeht [beta] </a></h1>
 			<nav id="nav">
 			
 				<ul>
 				{% block nav %}
 				
 				{% endblock %}
-				<li><a href="http://getskel.com" class="button special">Login</a></li>
+				<li><a href="http://getskel.com" class="button special">Sign Up</a></li>
 				</ul>
 			
 			</nav>
@@ -114,25 +141,35 @@
 				<div class="container">
 					<div class="row double">
 						<div class="6u 12u$(medium)">
-							<h2>Aliquam Interdum</h2>
-							<p>Ornare interdum nascetur enim lobortis nunc amet placerat pellentesque nascetur in adipiscing. Interdum amet accumsan placerat commodo ut amet aliquam blandit nunc tempor lobortis nunc non. Mi accumsan. Justo aliquet massa adipiscing cubilia eu accumsan id. Arcu accumsan faucibus vis ultricies adipiscing ornare ut. Mi accumsan. Justo aliquet massa adipiscing cubilia eu accumsan id lorem ipsum dolor.</p>
+							<h2>wasgeht</h2>
+							<p>dasgeht aims to offer quick and easy discovery of cultural events. 
+							Currently we cover only Berlin and only electronic music. This might or might not change soon.
+							</p>
+							<p>dasgeht was designed and developed by <a href="http://hanefeld.eu">Alec Hanefeld</a>. If you have suggestions or want talk,  <a href="mailto:/alec@hanefeld.eu">drop me a line</a></p>
 						</div>
 						<div class="3u 6u(medium) 12u$(small)">
-							<h3>Accumsan</h3>
-							<ul class="alt">
-								<li>Nascetur nunc varius commodo.</li>
-								<li>Vis id faucibus montes tempor</li>
-								<li>massa amet lobortis vel.</li>
-								<li>Nascetur nunc varius commodo.</li>
-							</ul>
+							<h3>Other </h3>
+							<p>This website uses cookies. By visting this website you agree to the placement of cookies.<br/>
+							This website uses Google Analytics to collect data for making your experience better. To ensure your anonymity we have removed parts of your IP address. To stop all tracking click  <a href=”javascript:gaOptout()”>here.</a>.
+
+						</p>
+						<p>Diese Seite benutzt Cookies. Mit dem Besuch der Seite stimmen sie dem zu. <br/>
+						Diese Webseite benutzt Google Analytics um Besucherzahlen zu Messen. Um deine Anonymität sicher zu stellen werden Teile deiner IP entfernt. Möchtest du garnicht erfasst werden klicke <a href=”javascript:gaOptout()”>hier.</a>.
+								
+						</p>
 						</div>
 						<div class="3u$ 6u$(medium) 12u$(small)">
-							<h3>Faucibus</h3>
+							<h3>Credit</h3>
+							<p>All data currently comes from <a href="http://www.residentadvisor.net/">Resident Advisor</a>. Go visit their site, it has much more to offer than this one!
+							</p>
+							<p>All copyright of the streams belongs to the respective artists. 
+							</p>
+							<h3>Imprint</h3>
 							<ul class="alt">
-								<li>Nascetur nunc varius commodo.</li>
-								<li>Vis id faucibus montes tempor</li>
-								<li>massa amet lobortis vel.</li>
-								<li>Nascetur nunc varius commodo.</li>
+								<li>Alec Hanefeld</li>
+								<li>Rollbergstr. 1</li>
+								<li>D-12053 Berlin</li>
+								<li>alec@hanefeld.eu</li>
 							</ul>
 						</div>
 					</div>
