@@ -18,18 +18,61 @@
 		</script>
 		<script>
 
+			
+
 
 			$(document).ready(function() {  
+				var infoBox = {
+
+					layer: skel.plugins.layers.get('infoBox'),
+
+					hide: function () {
+						this.layer.hide();
+					},
+				};	
+
+				var streamBox = {
+
+					layer: skel.plugins.layers.get('streamBox'),
+
+					hide: function () {
+						this.layer.hide();
+					},
+
+					canStream: true,
+					allowStreaming: function (flag) { this.canStream = flag; },
+
+					widget: SC.Widget('sc-widget'),
+					
+					loadTrack: function (trackUrl) {
+						this.widget.load(trackUrl, {'auto_play': true});
+
+					}
+
+				};
+
+							
+
     			var artistItems = $('.artist-item');
 
+    			var mainButton = $('#mainButton');
+    			
+    			mainButton.click(function (event) {
+    				infoBox.hide();
+    				streamBox.hide();
+    				streamBox.allowStreaming(false);
+
+    			});
+    			
 				artistItems.click(function (event) {
 					var trackUrl = $(this).data('soundcloud-track');
-					if (typeof(trackUrl) != "undefined") {
-						var widget = SC.Widget('sc-widget');
-						widget.load(trackUrl, {'auto_play': true});
-						widget.play();
+					if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
+						infoBox.hide()
+						streamBox.loadTrack(trackUrl);
 					}
 				}); 
+
+
 			
 			});
 		</script>
@@ -43,7 +86,7 @@
 	<body id="top">
 
 		<header id="header" class="skel-layers-fixed">
-			<h1><a href="#">heutnacht</a></h1>
+			<h1><a href="#">dasgeht</a></h1>
 			<nav id="nav">
 			
 				<ul>

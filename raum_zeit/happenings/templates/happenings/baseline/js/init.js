@@ -41,14 +41,32 @@
 				},
 				plugins: {
 					layers: {
+						// infoBoxSmall: {
+						// 	position: 'bottom',
+						// 	width: '400',
+						// 	maxWidth: '30%',
+						// 	height: '150',
+
+						// 	//animation: 'overlayY',
+						// 	//hidden: true,
+						// 	html: '<div id="skel-layers-fixed"><div class="paper"><p>dd</p><p></p></div></div>'
+						// },
+						
+
+						streamBox: {
+							position: 'bottom',
+							width: '80%',
+							height: '7em',
+							//hidden: true,
+							animation: 'overlayY',					
+						},
 						infoBox: {
 							position: 'bottom',
-							width: '30%',
-							height: '8em',
-							animation: 'overlayY',
-							//hidden: true,
-							html: '<div class="paper"><iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F1848538&show_artwork=false&show_like=false&buying=false"  width="100%" height="80" scrolling="no" frameborder="no"></iframe></div>'
+							width: '80%',
+							height: '7em',
+							animation: 'overlayY',					
 						},
+
 
 						config: {
 							mode: 'transform'

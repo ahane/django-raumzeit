@@ -25,8 +25,8 @@ performance_list = views.PerformanceViewSet.as_view({
 
 
 urlpatterns = patterns('',
-	url(r'^$', views.HappeningListView.as_view(), name='happenings_list'),
-	url(r'^current/$', views.CurrentHappeningListView.as_view(), name='current_happenings_list'),
+	url(r'^$', views.homepage_view, name='homepage'),
+	url(r'^berlin/$', views.CurrentHappeningListView.as_view(), name='current_happenings_list'),
 	url(r'^happenings/$', views.HappeningListView.as_view(), name='happenings_list'),
 	url(r'^(?P<pk>\d+)/$', views.HappeningDetailView.as_view(), name='happening_detail'),
 	

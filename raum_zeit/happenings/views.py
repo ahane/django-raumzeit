@@ -2,6 +2,7 @@ import datetime
 
 from django.views import generic
 from django.http import Http404
+from django.shortcuts import redirect
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -19,6 +20,9 @@ from happenings.models import Happening, HappeningLink, Location, LocationLink, 
 ###########################
 # HTML Views
 ###########################
+
+def homepage_view(request):
+	return redirect('happenings:current_happenings_list')
 
 class HappeningListView(generic.ListView):
 	model = Happening
