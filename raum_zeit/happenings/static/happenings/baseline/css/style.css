@@ -14,7 +14,7 @@ body, input, select, textarea {
   line-height: 1.65em; }
 
 a {
-  color: #DB5560;
+  color: #A03D49;
   text-decoration: underline; }
   a:hover {
     text-decoration: none; }
@@ -177,8 +177,8 @@ textarea {
   input[type="email"]:focus,
   select:focus,
   textarea:focus {
-    border-color: #DB5560;
-    box-shadow: 0 0 0 1px #DB5560; }
+    border-color: #A03D49;
+    box-shadow: 0 0 0 1px #A03D49; }
 
 .select-wrapper {
   text-decoration: none;
@@ -269,8 +269,8 @@ input[type="radio"] {
     content: '\f00c'; }
   input[type="checkbox"]:focus + label:before,
   input[type="radio"]:focus + label:before {
-    border-color: #DB5560;
-    box-shadow: 0 0 0 1px #DB5560; }
+    border-color: #A03D49;
+    box-shadow: 0 0 0 1px #A03D49; }
 
 input[type="checkbox"] + label:before {
   border-radius: 4px; }
@@ -565,18 +565,18 @@ input[type="button"],
   input[type="reset"].special,
   input[type="button"].special,
   .button.special {
-    background-color: #DB5560;
+    background-color: #A03D49;
     color: #ffffff !important; }
     input[type="submit"].special:hover,
     input[type="reset"].special:hover,
     input[type="button"].special:hover,
     .button.special:hover {
-      background-color: #df6a74; }
+      background-color: #b24451; }
     input[type="submit"].special:active,
     input[type="reset"].special:active,
     input[type="button"].special:active,
     .button.special:active {
-      background-color: #d7404c; }
+      background-color: #8e3641; }
   input[type="submit"].disabled, input[type="submit"]:disabled,
   input[type="reset"].disabled,
   input[type="reset"]:disabled,

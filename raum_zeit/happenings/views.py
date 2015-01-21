@@ -46,7 +46,8 @@ class CurrentHappeningCardView(generic.ListView):
 		timespan_happenings = Happening.objects.in_timespan(after=after, before=before)
 		return timespan_happenings.with_artists().with_location()
 
-
+class SignUpMockView(generic.TemplateView):
+	template_name = 'happenings/baseline/signup_mock.html'
 
 
 class HappeningDetailView(generic.DetailView):

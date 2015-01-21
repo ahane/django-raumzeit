@@ -14,21 +14,16 @@ find out whats happening in berlin | nightlife music clubs
 
 {% block banner %}
 <section id="banner">
-	<h2>Find out whats happening now</h2>
-	
+	<h2>Woops!</h2>
 </section>
 {% endblock %}
 
 {% block content %}
-<div class="row uniform">
-{% for happening in object_list %}
-	<div class="4u{% cycle '' '' '$' %} 6u(medium) 12u$(xsmall)">
-		<a id="{{happening.id}}"></a>
-		{% include 'happenings/baseline/happening_paper.html' %}
-	</div> 
-
-{% endfor %}<!-- End iteration over happenigns -->
+<div class="row">
+	<div class="-4u 4u">
+		<h2>dasgeht is in early beta</h2>
+		<p>Our interactive features are invite only right now.</p>
+		<p>Thanks for clicken though. We have noted your interest will work even harder!</p>
+	</div>
 </div>
-{% include 'happenings/baseline/bottom_boxes.html' %}
 {% endblock %}
-
