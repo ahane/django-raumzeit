@@ -46,14 +46,14 @@
 						streamBox: {
 							position: 'bottom',
 							width: '80%',
-							height: '7em',
+							height: '8em',
 							//hidden: true,
 							animation: 'overlayY',					
 						},
 						infoBox: {
 							position: 'bottom',
 							width: '80%',
-							height: '7em',
+							height: '8em',
 							animation: 'overlayY',					
 						},
 

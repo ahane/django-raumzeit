@@ -19,7 +19,7 @@
 		
 		<!-- Google Analytics Opt-Out Cookie -->
 		<script>
-				var gaProperty = 'UA-XXXXXXX-X';
+				var gaProperty = 'UA-54633103-2';
 				var disableStr = 'ga-disable-' + gaProperty;
 				if (document.cookie.indexOf(disableStr + '=true') > -1) {
 				  window[disableStr] = true;
@@ -56,6 +56,20 @@
 					hide: function () {
 						this.layer.hide();
 					},
+
+					show: function () {
+						this.layer.show();
+						if (streamBox.canStream) {
+							this.mainButton.text('Deactivate Streaming');
+						}
+						else {
+							this.mainButton.text('Activate Streaming');
+						}
+					},
+
+					mainButton: $('#mainButton')
+
+
 				};	
 
 				var streamBox = {
@@ -63,44 +77,64 @@
 					layer: skel.plugins.layers.get('streamBox'),
 
 					hide: function () {
+						console.log('sb hi');
 						this.layer.hide();
 					},
 
+					show: function () {
+						this.layer.show();
+					},
+
 					canStream: true,
-					allowStreaming: function (flag) { this.canStream = flag; },
+					toogleStreaming: function () { 
+						this.canStream = !this.canStream; 
+						if (this.canStream) {
+							this.show();
+							if (this.currentUrl != '') {
+								this.loadTrack();
+							}
+						}
+						else {
+							this.hide();
+						}
+						return this;
+					},
+
+					currentUrl: '',
 
 					widget: SC.Widget('sc-widget'),
 					
-					loadTrack: function (trackUrl) {
-						this.widget.load(trackUrl, {'auto_play': true, 
+					loadTrack: function () {
+						if (this.currentUrl) {
+						this.widget.load(this.currentUrl, {'auto_play': true, 
 													'show_artwork': true, 
 													'download': false,
-													'color': '#db5560'});
-
+													'color': 'db5560'});
+						}
 					}
 
 				};
 
-							
-
-    			var artistItems = $('.artist-item');
-
-    			var mainButton = $('#mainButton');
+	 
     			
-    			mainButton.click(function (event) {
+    			infoBox.mainButton.click(function (event) {
     				infoBox.hide();
-    				streamBox.hide();
-    				streamBox.allowStreaming(false);
+    				streamBox.toogleStreaming();
 
     			});
     			
+         		var artistItems = $('.artist-item');
 				artistItems.click(function (event) {
-					var trackUrl = $(this).data('soundcloud-track');
-					if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
-						infoBox.hide()
-						streamBox.loadTrack(trackUrl);
+					streamBox.currentUrl = $(this).data('soundcloud-track');
+						if (streamBox.canStream) {
+							infoBox.hide();
+							streamBox.loadTrack();
+						}
+						else {
+							infoBox.show();
+						}
 					}
-				}); 
+				); 
 
 
 			
@@ -148,7 +182,7 @@
 							<p>dasgeht aims to offer quick and easy discovery of cultural events. 
 							Currently we cover only Berlin and only electronic music. This might or might not change soon.
 							</p>
-							<p>dasgeht was designed and developed by <a href="http://hanefeld.eu">Alec Hanefeld</a>. If you have suggestions or want talk,  <a href="mailto:/alec@hanefeld.eu">drop me a line</a></p>
+							<p>dasgeht was designed and developed by <a href="http://hanefeld.eu">Alec Hanefeld</a>. If you have suggestions or want to talk,  <a href="mailto:/alec@hanefeld.eu">drop me a line</a></p>
 						</div>
 						<div class="3u 6u(medium) 12u$(small)">
 							<h3>tracking</h3>
@@ -157,7 +191,7 @@
 
 						</p>
 						<p>Diese Seite benutzt Cookies. Mit dem Besuch der Seite stimmst Du dem zu. <br/>
-						Diese Webseite benutzt Google Analytics um Besucherzahlen zu messen. Um Anonymität zu garantieren, werden jedoch Teile deiner IP entfernt und nichts mit anderen Google Daten verknüpft. Totzdem werden Teile deiner Daten in die USA geschickt und von Google gespeichert. Möchtest Du garnicht erfasst werden, klicke <a href=”javascript:gaOptout()”>hier.</a>.
+						Diese Webseite benutzt Google Analytics um Besucherzahlen zu messen. Um Anonymität zu garantieren, werden Teile deiner IP entfernt. Totzdem werden Daten über dich in die USA geschickt und von Google gespeichert. Möchtest Du garnicht erfasst werden, klicke <a href=”javascript:gaOptout()”>hier.</a>.
 								
 						</p>
 						</div>
