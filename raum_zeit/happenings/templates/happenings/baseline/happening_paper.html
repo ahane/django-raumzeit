@@ -24,16 +24,18 @@
 		<div class="row">
 			<div class="12u$">
 
-				<ul class="artists">
+				<ul class="artists fa-ul" >
 						{% for artist in happening.artists.all %}
 							
 							{% with artist.links.all|soundcloud|smpl|first as sc_sample_track %}
 							{% if sc_sample_track %}
 								<li class="artist-item" data-soundcloud-track="{{ sc_sample_track.url }}">
-									{{ artist.name }} <i class="fa fa-play-circle"></i>
+									<i class="fa fa-play-circle active"></i> {{ artist.name }} 
 								</li>
 							{% else %}
-							<li class="artist-item">{{ artist.name }}</li>
+							<li class="artist-item">
+									<i class="fa fa-play-circle-o inactive"></i> {{ artist.name }} 
+								</li>
 							{% endif %}
 						
 							{% endwith %}		
@@ -47,22 +49,28 @@
 
 		
 		<div class="row"> <!-- Happening -->
-			<div class="10u"><h4>{{ happening.name }}</h4></div>
+			<div class="10u">
+				{% if happening.is_active %}
+					<h4>{{ happening.name }}</h4>
+				{% else %}
+					<h4>{{ happening.name }}</h4>
+				{% endif %}
+			</div>
 			<div class="1$">
 				<a href="{% url 'happenings:happening_detail' happening.id %}"><i class="fa fa-link fa-lg"></i></a>
 			</div>
 			<div class="12u$ ">
-				<h3>
+				
 				{% if happening.is_future %}
-					starts {{ happening.start|naturaltime }}
+					<h3>starts {{ happening.start|naturaltime }}</h3>
 
 				{% elif happening.is_active %}
-					ends {{ happening.stop|naturaltime }}
+					<h3 class="active">ends {{ happening.stop|naturaltime }}</h3>
 
 				{% elif happening.is_past %}
-					ended {{ happening.stop|naturaltime }}
+					<h3>ended {{ happening.stop|naturaltime }}</h3>
 				{% endif %}
-				</h3>
+				
 			</div>
 		</div>
 		<!-- End Happening -->

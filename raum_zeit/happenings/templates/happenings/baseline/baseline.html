@@ -4,7 +4,7 @@
 <!-- skel-baseline v2.0.2 | (c) n33 | getskel.com | MIT licensed -->
 <html>
 	<head>
-		<title>dasgeht - find out whats happening</title>
+		<title>{% block title %}{% endblock %} | das geht </title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -72,7 +72,10 @@
 					widget: SC.Widget('sc-widget'),
 					
 					loadTrack: function (trackUrl) {
-						this.widget.load(trackUrl, {'auto_play': true});
+						this.widget.load(trackUrl, {'auto_play': true, 
+													'show_artwork': true, 
+													'download': false,
+													'color': '#db5560'});
 
 					}
 
@@ -113,7 +116,7 @@
 	<body id="top">
 
 		<header id="header" class="skel-layers-fixed">
-			<h1><a href="#">dasgeht [beta] </a></h1>
+			<h1><a href="{% url 'happenings:homepage' %}">dasgeht </a> beta</h1>
 			<nav id="nav">
 			
 				<ul>

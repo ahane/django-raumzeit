@@ -1,5 +1,11 @@
 {% extends 'happenings/baseline/baseline.html' %}
 
+{% block title %}
+{{ happening.location.name }} | {{ happening.name }} | nightlife music clubs 
+{% endblock %}
+
+
+
 {% block nav %}
 <!--<li><a href="#top" class="button default"></a></li>-->
 
@@ -20,12 +26,22 @@
 
 {% block content %}
 <div class="row">
+	
 	<div class="-4u 4u$ -3u(medium) 6u(medium)$ 12u$(xsmall)">
 		{% include 'happenings/baseline/happening_paper.html' %}
 	</div>
-	<div class="-6u 4u$ -3u(medium) 6u(medium)$ 12u$(xsmall)">
-		<div id="bannerMenu">
-				<a class="button alt" href="{% url 'happenings:current_happenings_list' %}#{{ happening.id }}">Go Back to Stream</a>
+	
+<!--</div>
+<div class="row">-->
+	<div class="-4u 2u -3u(medium) 6u(medium)$ 12u$(xsmall)">
+		<div>
+			<a class="button special" href="{% url 'happenings:current_happenings_list' %}#{{ happening.id }}">Upload Picture</a>
+		</div>
+	</div>
+
+	<div class"2u$ -3u(medium) 6u(medium)$ 12u$(xsmall)">
+		<div>
+			<a class="button alt" href="{% url 'happenings:current_happenings_list' %}#{{ happening.id }}">Go Back to Stream</a>
 		</div>
 	</div>
 </div>

@@ -46,13 +46,7 @@ class CurrentHappeningCardView(generic.ListView):
 		timespan_happenings = Happening.objects.in_timespan(after=after, before=before)
 		return timespan_happenings.with_artists().with_location()
 
-class CurrentLocationsListView(generic.ListView):
-	model = Happening
-	template_name = 'happenings/baseline/happening_list.html'
-	def get_queryset(self):
-		after, before =  make_timespan()
-		timespan_happenings = Happening.objects.in_timespan(after=after, before=before)
-		return timespan_happenings.with_artists().with_location()
+
 
 
 class HappeningDetailView(generic.DetailView):
