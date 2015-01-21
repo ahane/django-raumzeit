@@ -143,6 +143,7 @@ class HappeningTests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
+
 class ArtistTests(APITestCase):
 	list_url = reverse('happenings:api-artists-list')
 	data = {'name': 'Artist1', 'description': 'FooBar', 'links': []}
@@ -577,3 +578,32 @@ class HappeningLinksTests(APITestCase):
 						  {'third_party': 'thirdparty2', 'url': hl2.url}],
 						   links)
 		
+	def test_future_lookup_repr_links(self):
+		url = reverse('happenings:api-happeninglinks-list')
+		tp1 = ThirdPartyFactory()
+		tp2 = ThirdPartyFactory()
+
+		past, present, future = make_timespan_happenings()
+		l_past = HappeningLinkFactory(happening=past, third_party=tp1)
+		l_present = HappeningLinkFactory(happening=present, third_party=tp1)
+		l_future = HappeningLinkFactory(happening=future, third_party=tp1)
+
+		l_future2 = HappeningLinkFactory(happening=present, third_party=tp2)
+		
+		query = {'third_party': tp1.id, 'only_future': True}
+		response = self.client.get(url, query, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		actual_links = {l_present.url, l_future.url}
+		found_links = {l['url'] for l in response.data}
+		
+		self.assertEqual(len(found_links), 2)
+		self.assertEqual(found_links, actual_links)
+
+		query = {'third_party': tp1.id}
+		response = self.client.get(url, query, format='json')
+		actual_links = {l_present.url, l_future.url, l_past.url}
+		found_links = {l['url'] for l in response.data}
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(len(found_links), 3)
+		self.assertEqual(found_links, actual_links)
+

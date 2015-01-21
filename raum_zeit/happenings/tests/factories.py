@@ -1,5 +1,6 @@
 import factory
 import datetime
+import pytz
 from happenings.util import UTC
 from happenings.models import Happening, HappeningLink, Artist, ArtistLink, Location, LocationLink, ThirdParty, Performance
 #import pytz
@@ -13,8 +14,22 @@ def make_tz():
 def make_dt(day=1, hour=12, minute=0, tzinfo=make_tz()):
 	return datetime.datetime(2015, 1, day, hour, minute, tzinfo=tzinfo)
 
-# def make_rfc3339(dt):
-# 	return datetime
+def make_timespan_happenings():
+	now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+	delta = datetime.timedelta
+	present_begin = now + delta(hours=-2)
+	present_end = present_begin + delta(hours=4)
+	present = HappeningFactory(start=present_begin, stop=present_end)
+
+	past_begin = now + delta(days=-2)
+	past_end = past_begin + delta(hours=4)
+	past = HappeningFactory(start=past_begin, stop=past_end)
+
+	future_begin = now + delta(days=2)
+	future_end = future_begin + delta(hours=4)
+	future = HappeningFactory(start=future_begin, stop=future_end)
+
+	return past, present, future
 
 ########################
 # Entity Factories

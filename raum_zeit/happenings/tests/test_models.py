@@ -101,37 +101,20 @@ class HappeningQueryTest(TestCase):
 		self.assertIsInstance(h, Happening)
 		self.assertEqual(h.name, 'happening1')
 
-	def make_timespans(self):
-		now = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
-		delta = datetime.timedelta
-		present_begin = now + delta(hours=-2)
-		present_end = now + delta(hours=2)
-		present = HappeningFactory(start=present_begin, stop=present_end)
-
-		past_begin = make_dt(hour=0)
-		past_end = make_dt(hour=2)
-		past = HappeningFactory(start=past_begin, stop=past_end)
-
-		future_begin = now + delta(hours=2)
-		future_end = now + delta(hours=4)
-		future = HappeningFactory(start=future_begin, stop=future_end)
-
-		return past, present, future
-
 	def test_is_past(self):
-		past, present, future = self.make_timespans()
+		past, present, future = make_timespan_happenings()
 		self.assertTrue(past.is_past())
 		self.assertFalse(present.is_past())
 		self.assertFalse(future.is_past())
 
 	def test_is_active(self):
-		past, present, future = self.make_timespans()
+		past, present, future = make_timespan_happenings()
 		self.assertFalse(past.is_active())
 		self.assertTrue(present.is_active())
 		self.assertFalse(future.is_active())
 
 	def test_is_future(self):
-		past, present, future = self.make_timespans()
+		past, present, future = make_timespan_happenings()
 		self.assertFalse(past.is_future())
 		self.assertFalse(present.is_future())
 		self.assertTrue(future.is_future())
@@ -155,6 +138,7 @@ class ArtistMethodsTest(TestCase):
 
 		links_smpl_tp1 = set(a.links_with(category='SMPL', third_party_name=tp1.name))
 		self.assertEquals({s1}, links_smpl_tp1)
+
 
 
 

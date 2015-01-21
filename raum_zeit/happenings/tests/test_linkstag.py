@@ -72,5 +72,5 @@ class TestFilters(TestCase):
 		self.assertEquals(categories, {'SMPL', 'REPR'})
 
 	def test_googlemaps(self):
-		google_query_url = compile_google_maps(" Schillerpromenade 11, 12049 Berlin")
+		google_query_url = encode_googlemaps(" Schillerpromenade 11, 12049 Berlin")
 		self.assertEquals(google_query_url, 'http://maps.google.com/maps?q=+Schillerpromenade+11%2C+12049+Berlin')

@@ -21,7 +21,7 @@ def get_samples(links):
 def get_representations(links):
 	return match_category(links, 'REPR')
 
-def get_googlemaps(address):
+def encode_googlemaps(address):
 	address = str(address)
 	query = urllib.parse.urlencode({'q': address})
 	return 'http://maps.google.com/maps?' + query
@@ -30,6 +30,6 @@ def get_googlemaps(address):
 
 register.filter('soundcloud', get_soundcloud)
 register.filter('residenta', get_residenta)
-register.filter('googlemaps', get_googlemaps)
+register.filter('googlemaps', encode_googlemaps)
 register.filter('smpl', get_samples)
 register.filter('repr', get_representations)
