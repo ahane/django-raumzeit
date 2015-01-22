@@ -41,8 +41,8 @@ class LocationFactory(factory.django.DjangoModelFactory):
 
 	name = factory.Sequence(lambda n: 'location{}'.format(n))
 	address = 'foobar'
-	lat = 51.1
-	lon = 13.1
+	# lat = 51.1
+	# lon = 13.1
 
 class ThirdPartyFactory(factory.django.DjangoModelFactory):
 	class Meta:

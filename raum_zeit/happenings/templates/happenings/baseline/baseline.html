@@ -12,10 +12,12 @@
 		<script src="{% static 'happenings/baseline/js/jquery.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel.min.js' %}"></script>
 		<script src="{% static 'happenings/baseline/js/skel-layers.min.js' %}"></script>
+
 		<script src="https://w.soundcloud.com/player/api.js" ></script>
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
+<<<<<<< HEAD
 		
 		<!-- Google Analytics Opt-Out Cookie -->
 		<script>
@@ -43,16 +45,20 @@
 			  ga('set', 'anonymizeIp', true);
 
 		</script>
+=======
+		<script src="{% static 'happenings/baseline/js/main.js' %}"></script>
+>>>>>>> latlon
 		<script>
 
 			
 
 
-			$(document).ready(function() {  
-				var infoBox = {
+			// $(document).ready(function() {  
+			// 	var infoBox = {
 
-					layer: skel.plugins.layers.get('infoBox'),
+			// 		layer: skel.plugins.layers.get('infoBox'),
 
+<<<<<<< HEAD
 					hide: function () {
 						this.layer.hide();
 					},
@@ -71,11 +77,18 @@
 
 
 				};	
+=======
+			// 		hide: function () {
+			// 			this.layer.hide();
+			// 		},
+			// 	};	
+>>>>>>> latlon
 
-				var streamBox = {
+			// 	var streamBox = {
 
-					layer: skel.plugins.layers.get('streamBox'),
+			// 		layer: skel.plugins.layers.get('streamBox'),
 
+<<<<<<< HEAD
 					hide: function () {
 						console.log('sb hi');
 						this.layer.hide();
@@ -101,9 +114,18 @@
 					},
 
 					currentUrl: '',
+=======
+			// 		hide: function () {
+			// 			this.layer.hide();
+			// 		},
 
-					widget: SC.Widget('sc-widget'),
+			// 		canStream: true,
+			// 		allowStreaming: function (flag) { this.canStream = flag; },
+>>>>>>> latlon
+
+			// 		widget: SC.Widget('sc-widget'),
 					
+<<<<<<< HEAD
 					loadTrack: function () {
 						if (this.currentUrl) {
 						this.widget.load(this.currentUrl, {'auto_play': true, 
@@ -119,9 +141,32 @@
     			infoBox.mainButton.click(function (event) {
     				infoBox.hide();
     				streamBox.toogleStreaming();
+=======
+			// 		loadTrack: function (trackUrl) {
+			// 			this.widget.load(trackUrl, {'auto_play': true});
 
-    			});
+			// 		}
+
+			// 	};
+
+							
+
+   //  			var artistItems = $('.artist-item');
+
+   //  			var mainButton = $('#mainButton');
     			
+   //  			mainButton.click(function (event) {
+   //  				infoBox.hide();
+   //  				streamBox.hide();
+   //  				streamBox.allowStreaming(false);
+
+   //  			});
+
+   //  			var 
+>>>>>>> latlon
+
+    			
+<<<<<<< HEAD
          		var artistItems = $('.artist-item');
 				artistItems.click(function (event) {
 					streamBox.currentUrl = $(this).data('soundcloud-track');
@@ -134,10 +179,19 @@
 						}
 					}
 				); 
+=======
+			// 	artistItems.click(function (event) {
+			// 		var trackUrl = $(this).data('soundcloud-track');
+			// 		if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
+			// 			infoBox.hide()
+			// 			streamBox.loadTrack(trackUrl);
+			// 		}
+			// 	}); 
+>>>>>>> latlon
 
 
 			
-			});
+			// });
 		</script>
 		<noscript>
 			<link rel="stylesheet" href="{% static 'happenings/baseline/css/skel.css' %}" />
