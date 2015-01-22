@@ -17,19 +17,18 @@
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
-<<<<<<< HEAD
 		
 		<!-- Google Analytics Opt-Out Cookie -->
 		<script>
-				var gaProperty = 'UA-54633103-2';
-				var disableStr = 'ga-disable-' + gaProperty;
-				if (document.cookie.indexOf(disableStr + '=true') > -1) {
-				  window[disableStr] = true;
-				}
-				function gaOptout() {
-				  document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-				  window[disableStr] = true;
-				}
+				// var gaProperty = 'UA-54633103-2';
+				// var disableStr = 'ga-disable-' + gaProperty;
+				// if (document.cookie.indexOf(disableStr + '=true') > -1) {
+				//   window[disableStr] = true;
+				// }
+				// function gaOptout() {
+				//   document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+				//   window[disableStr] = true;
+				// }
 
 		</script>
 
@@ -45,20 +44,13 @@
 			  ga('set', 'anonymizeIp', true);
 
 		</script>
-=======
+
 		<script src="{% static 'happenings/baseline/js/main.js' %}"></script>
->>>>>>> latlon
+
 		<script>
 
 			
 
-
-			// $(document).ready(function() {  
-			// 	var infoBox = {
-
-			// 		layer: skel.plugins.layers.get('infoBox'),
-
-<<<<<<< HEAD
 					hide: function () {
 						this.layer.hide();
 					},
@@ -77,18 +69,7 @@
 
 
 				};	
-=======
-			// 		hide: function () {
-			// 			this.layer.hide();
-			// 		},
-			// 	};	
->>>>>>> latlon
 
-			// 	var streamBox = {
-
-			// 		layer: skel.plugins.layers.get('streamBox'),
-
-<<<<<<< HEAD
 					hide: function () {
 						console.log('sb hi');
 						this.layer.hide();
@@ -114,18 +95,7 @@
 					},
 
 					currentUrl: '',
-=======
-			// 		hide: function () {
-			// 			this.layer.hide();
-			// 		},
 
-			// 		canStream: true,
-			// 		allowStreaming: function (flag) { this.canStream = flag; },
->>>>>>> latlon
-
-			// 		widget: SC.Widget('sc-widget'),
-					
-<<<<<<< HEAD
 					loadTrack: function () {
 						if (this.currentUrl) {
 						this.widget.load(this.currentUrl, {'auto_play': true, 
@@ -141,32 +111,7 @@
     			infoBox.mainButton.click(function (event) {
     				infoBox.hide();
     				streamBox.toogleStreaming();
-=======
-			// 		loadTrack: function (trackUrl) {
-			// 			this.widget.load(trackUrl, {'auto_play': true});
 
-			// 		}
-
-			// 	};
-
-							
-
-   //  			var artistItems = $('.artist-item');
-
-   //  			var mainButton = $('#mainButton');
-    			
-   //  			mainButton.click(function (event) {
-   //  				infoBox.hide();
-   //  				streamBox.hide();
-   //  				streamBox.allowStreaming(false);
-
-   //  			});
-
-   //  			var 
->>>>>>> latlon
-
-    			
-<<<<<<< HEAD
          		var artistItems = $('.artist-item');
 				artistItems.click(function (event) {
 					streamBox.currentUrl = $(this).data('soundcloud-track');
@@ -179,19 +124,7 @@
 						}
 					}
 				); 
-=======
-			// 	artistItems.click(function (event) {
-			// 		var trackUrl = $(this).data('soundcloud-track');
-			// 		if (typeof(trackUrl) != "undefined" && streamBox.canStream) {
-			// 			infoBox.hide()
-			// 			streamBox.loadTrack(trackUrl);
-			// 		}
-			// 	}); 
->>>>>>> latlon
 
-
-			
-			// });
 		</script>
 		<noscript>
 			<link rel="stylesheet" href="{% static 'happenings/baseline/css/skel.css' %}" />
