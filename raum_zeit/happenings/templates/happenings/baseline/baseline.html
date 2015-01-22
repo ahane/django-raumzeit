@@ -17,18 +17,19 @@
 		<script>
 		{% include 'happenings/baseline/js/init.js' %}
 		</script>
+<<<<<<< HEAD
 		
 		<!-- Google Analytics Opt-Out Cookie -->
 		<script>
-				// var gaProperty = 'UA-54633103-2';
-				// var disableStr = 'ga-disable-' + gaProperty;
-				// if (document.cookie.indexOf(disableStr + '=true') > -1) {
-				//   window[disableStr] = true;
-				// }
-				// function gaOptout() {
-				//   document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-				//   window[disableStr] = true;
-				// }
+				var gaProperty = 'UA-54633103-2';
+				var disableStr = 'ga-disable-' + gaProperty;
+				if (document.cookie.indexOf(disableStr + '=true') > -1) {
+				  window[disableStr] = true;
+				}
+				function gaOptout() {
+				  document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+				  window[disableStr] = true;
+				}
 
 		</script>
 
@@ -45,11 +46,17 @@
 
 		</script>
 
-		<script src="{% static 'happenings/baseline/js/main.js' %}"></script>
+		<!-- <script src="{% static 'happenings/baseline/js/main.js' %}"></script>-->
 
 		<script>
 
 			
+
+
+			$(document).ready(function() {  
+				var infoBox = {
+
+					layer: skel.plugins.layers.get('infoBox'),
 
 					hide: function () {
 						this.layer.hide();
@@ -70,16 +77,20 @@
 
 				};	
 
+
+				var streamBox = {
+					currentUrl: '',
+					canStream: true,
+					widget: SC.Widget('sc-widget'),
+					layer: skel.plugins.layers.get('streamBox'),
+
 					hide: function () {
-						console.log('sb hi');
-						this.layer.hide();
-					},
+							console.log('sb hi');
+							this.layer.hide();},
 
 					show: function () {
-						this.layer.show();
-					},
+							this.layer.show();},
 
-					canStream: true,
 					toogleStreaming: function () { 
 						this.canStream = !this.canStream; 
 						if (this.canStream) {
@@ -93,8 +104,6 @@
 						}
 						return this;
 					},
-
-					currentUrl: '',
 
 					loadTrack: function () {
 						if (this.currentUrl) {
@@ -111,6 +120,7 @@
     			infoBox.mainButton.click(function (event) {
     				infoBox.hide();
     				streamBox.toogleStreaming();
+    			});
 
          		var artistItems = $('.artist-item');
 				artistItems.click(function (event) {
@@ -124,6 +134,7 @@
 						}
 					}
 				); 
+			});
 
 		</script>
 		<noscript>
