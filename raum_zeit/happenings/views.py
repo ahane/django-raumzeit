@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException, ParseError
+import django_filters as filters
 
 
 from happenings.serializers import LocationSerializer, ArtistSerializer, HappeningSerializer, \
@@ -184,21 +185,21 @@ class ArtistLinkList(generics.ListCreateAPIView):
     queryset = ArtistLink.objects.all()
     serializer_class = ArtistLinkSerializer
     
-class ArtistLinkNoSamplesList(generics.ListCreateAPIView):
-    """
-    List all artist or create a new one.
-    """
-    serializer_class = ArtistLinkSerializer
-    def get_queryset(self):
-        queryset = ArtistLink.objects.all()
-        third_party = self.request.query_params.get('third_party', None)
-        if third_party:
-            queryset =  queryset.no_samples(third_party)
-            if not queryset.exists():
-                raise Http404
-        else:
-            raise ParseError
-        return queryset
+# class ArtistLinkNoSamplesList(generics.ListCreateAPIView):
+#     """
+#     List all artist or create a new one.
+#     """
+#     serializer_class = ArtistLinkSerializer
+#     def get_queryset(self):
+#         queryset = ArtistLink.objects.all()
+#         third_party = self.request.query_params.get('third_party', None)
+#         if third_party:
+#             queryset =  queryset.no_samples(third_party)
+#             if not queryset.exists():
+#                 raise Http404
+#         else:
+#             raise ParseError
+#         return queryset
     
 
 class ArtistLinkDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -208,6 +209,14 @@ class ArtistLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ArtistLink.objects.all()
     serializer_class = ArtistLinkSerializer
 
+
+
+class HappeningLinkFilter(filters.FilterSet):
+    after = filters.DateTimeFilter(name='happening__start', lookup_type='gte')
+    class Meta:
+        model = HappeningLink
+        fields = ['third_party', 'after', 'third_party__name']
+
 class HappeningLinkViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -215,24 +224,9 @@ class HappeningLinkViewSet(viewsets.ModelViewSet):
 
 
     """
+    queryset = HappeningLink.objects.all()
     serializer_class = HappeningLinkSerializer
-    def get_queryset(self):
-        queryset = HappeningLink.objects.all()
-        third_party = self.request.query_params.get('third_party', None)
-        only_future = self.request.query_params.get('only_future', None)
-
-        if third_party:
-            queryset =  queryset.filter(third_party=third_party)
-            
-        if only_future:
-            yday = datetime.datetime.utcnow() - datetime.timedelta(days=1)
-            yesterday = datetime.datetime(yday.year, yday.month, yday.day)
-            queryset = queryset.filter(happening__start__gt=yesterday)
-
-        if not queryset.exists():
-                raise Http404
-
-        return queryset
+    filter_class = HappeningLinkFilter
 
 class PerformanceViewSet(viewsets.ModelViewSet):
     """

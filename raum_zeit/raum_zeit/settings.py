@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django_extras',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,5 +98,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
